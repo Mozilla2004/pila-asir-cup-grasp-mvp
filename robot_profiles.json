@@ -1,0 +1,43 @@
+{
+  "two_finger_gripper": {
+    "morphology_type": "parallel_jaw",
+    "available_actions": ["open", "close", "adjust_force", "shift_position"],
+    "force_control_mode": "position_servo_with_force_limit",
+    "contact_model": "rigid_two_point",
+    "adapter_rules": {
+      "support_degraded": {
+        "primary_action": "increase_grip_force",
+        "secondary_action": "shift_contact_position",
+        "restart_from": "P3"
+      }
+    }
+  },
+  "three_finger_gripper": {
+    "morphology_type": "adaptive_tripod",
+    "available_actions": ["open", "close", "add_contact_point", "redistribute_force", "stabilize_form_closure"],
+    "force_control_mode": "impedance_control",
+    "contact_model": "soft_three_point",
+    "adapter_rules": {
+      "support_degraded": {
+        "primary_action": "add_third_contact_point",
+        "secondary_action": "redistribute_contact_force",
+        "tertiary_action": "stabilize_triangular_support",
+        "restart_from": "P3"
+      }
+    }
+  },
+  "suction_gripper": {
+    "morphology_type": "vacuum_cup",
+    "available_actions": ["activate_suction", "adjust_pressure", "check_seal", "set_lift_acceleration"],
+    "force_control_mode": "pressure_regulated",
+    "contact_model": "surface_adhesion",
+    "adapter_rules": {
+      "support_degraded": {
+        "primary_action": "increase_suction_pressure",
+        "secondary_action": "check_surface_seal",
+        "tertiary_action": "reduce_lift_acceleration",
+        "restart_from": "P3"
+      }
+    }
+  }
+}
