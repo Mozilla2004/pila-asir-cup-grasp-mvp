@@ -48,12 +48,13 @@ The report defaults to English. Use the top-right language switcher to view the 
 
 报告默认英文显示，可通过右上角按钮切换为中文。
 
-**v0.4.0 terminology upgrade + animation fix:**
+**v0.4.0 terminology upgrade + animation fix + improved explanations:**
 
 - Renamed the public-facing language to PILa (Physical Interaction Language / 物理交互语言)
 - Kept AS-IR as the underlying intermediate representation layer
 - Added a glossary explaining PILa, AS-IR, AS-IR Core, Runtime, Engineering Adapter and cross-embodiment meaning transfer
 - Fixed physical interaction animation: Patched Lift visually lifts cup, Cup slips shows rotation
+- **Improved explanation for Raw Trajectory: Failure vs Patched Run**, clarifying the difference between signal-level changes and AS-IR/PILa structural interpretation with bilingual insight cards
 
 ## How to Run
 

@@ -722,9 +722,73 @@ runtime risks and engineering adapters.</span>
 <h2>3. <span data-en="Raw Trajectory View" data-zh="原始轨迹视角">Raw Trajectory View</span></h2>
 <img src="{plot_rel_path}" alt="Trajectory comparison plot">
 <p class="note">
-    <span data-en="Raw trajectory tells us what changed, but not why the interaction failed. We can see grip_force is low and slip_score is high, but the structural reason (degraded support relation) is not explicit in the numbers alone." data-zh="原始轨迹能告诉我们哪些信号发生了变化，但不能直接说明交互为什么失败。我们可以看到 grip_force 偏低、slip_score 偏高，但结构性的原因（支撑关系退化）在数据中并不显式。">Raw trajectory tells us <em>what changed</em>, but not <em>why</em> the interaction failed.
-    We can see grip_force is low and slip_score is high, but the <strong>structural reason</strong>
-    (degraded support relation) is not explicit in the numbers alone.</span>
+    <span data-en="This chart compares the failed run and the patched run of the cup-grasp task. In the failed run, the grip force remains too low, the slip score rises sharply, the cup tilt increases, the contact force drops, and the cup only lifts briefly before falling. In the patched run, the grip force is increased, the contact force remains stable, the slip score stays close to zero, and the cup height continues to rise. This indicates that the patch improves support stability during grasping and lifting." data-zh="这组图对比了抓杯任务的失败运行与补丁后运行。失败运行中，抓取力不足，滑移分数升高，杯子倾斜增大，接触力下降，杯子只短暂离开桌面后又掉落。补丁后运行中，抓取力提高，接触力保持稳定，滑移风险接近零，杯子高度持续上升，说明补丁增强了抓取过程中的支撑稳定性。">This chart compares the failed run and the patched run of the cup-grasp task. In the failed run, the grip force remains too low, the slip score rises sharply, the cup tilt increases, the contact force drops, and the cup only lifts briefly before falling. In the patched run, the grip force is increased, the contact force remains stable, the slip score stays close to zero, and the cup height continues to rise. This indicates that the patch improves support stability during grasping and lifting.</span>
+    <span data-en="However, raw trajectory data only shows which signals changed. It does not directly explain why the physical interaction failed. AS-IR / PILa adds this missing structural layer: during the grasp → lift phase, the support relation between the gripper and the cup degrades from stable support to unstable support and eventually breaks. The root cause is not a single abnormal signal, but the failure to maintain support stability under low-friction conditions." data-zh="但原始轨迹只能显示"哪些信号发生了变化"，不能直接表达"为什么交互失败"。AS-IR / PILa 要补上的正是这一层结构意义：在 grasp → lift 阶段，杯子与夹爪之间的 support relation 从稳定支撑退化为不稳定支撑，最终断裂。失败的本质不是某一个数值异常，而是低摩擦条件下支撑关系无法维持。">However, raw trajectory data only shows which signals changed. It does not directly explain why the physical interaction failed. AS-IR / PILa adds this missing structural layer: during the grasp → lift phase, the support relation between the gripper and the cup degrades from stable support to unstable support and eventually breaks. The root cause is not a single abnormal signal, but the failure to maintain support stability under low-friction conditions.</span>
+</p>
+
+<style>
+.insight-cards {{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}}
+
+.insight-card {{
+    background: #f8fafc;
+    border-left: 4px solid #3b82f6;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}}
+
+.insight-card h4 {{
+    margin: 0 0 0.5rem 0;
+    color: #1e40af;
+    font-size: 1rem;
+    font-weight: 600;
+}}
+
+.insight-card p {{
+    margin: 0;
+    color: #475569;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}}
+</style>
+
+<div class="insight-cards">
+    <div class="insight-card">
+        <h4>
+            <span data-en="📊 Raw Trajectory" data-zh="📊 原始轨迹">📊 Raw Trajectory</span>
+        </h4>
+        <p>
+            <span data-en="Which signals changed?" data-zh="发生了什么信号变化？">Which signals changed?</span>
+        </p>
+    </div>
+
+    <div class="insight-card">
+        <h4>
+            <span data-en="🧠 AS-IR / PILa" data-zh="🧠 AS-IR / PILa">🧠 AS-IR / PILa</span>
+        </h4>
+        <p>
+            <span data-en="What structural change happened in the physical interaction?" data-zh="物理交互结构发生了什么变化？">What structural change happened in the physical interaction?</span>
+        </p>
+    </div>
+
+    <div class="insight-card">
+        <h4>
+            <span data-en="🔧 Failure Patch" data-zh="🔧 Failure Patch">🔧 Failure Patch</span>
+        </h4>
+        <p>
+            <span data-en="Which part of the interaction structure should be repaired?" data-zh="应该修复哪一段结构？">Which part of the interaction structure should be repaired?</span>
+        </p>
+    </div>
+</div>
+
+<p class="note" style="margin-top: 1.5rem;">
+    <span data-en="This chart compares the failed run and the patched run of the cup-grasp task. In the failed run, the grip force remains too low, the slip score rises sharply, the cup tilt increases, the contact force drops, and the cup only lifts briefly before falling. In the patched run, the grip force is increased, the contact force remains stable, the slip score stays close to zero, and the cup height continues to rise. This indicates that the patch improves support stability during grasping and lifting." data-zh="这组图对比了抓杯任务的失败运行与补丁后运行。失败运行中，抓取力不足，滑移分数升高，杯子倾斜增大，接触力下降，杯子只短暂离开桌面后又掉落。补丁后运行中，抓取力提高，接触力保持稳定，滑移风险接近零，杯子高度持续上升，说明补丁增强了抓取过程中的支撑稳定性。">This chart compares the failed run and the patched run of the cup-grasp task. In the failed run, the grip force remains too low, the slip score rises sharply, the cup tilt increases, the contact force drops, and the cup only lifts briefly before falling. In the patched run, the grip force is increased, the contact force remains stable, the slip score stays close to zero, and the cup height continues to rise. This indicates that the patch improves support stability during grasping and lifting.</span>
+    <span data-en="However, raw trajectory data only shows which signals changed. It does not directly explain why the physical interaction failed. AS-IR / PILa adds this missing structural layer: during the grasp → lift phase, the support relation between the gripper and the cup degrades from stable support to unstable support and eventually breaks. The root cause is not a single abnormal signal, but the failure to maintain support stability under low-friction conditions." data-zh="但原始轨迹只能显示"哪些信号发生了变化"，不能直接表达"为什么交互失败"。AS-IR / PILa 要补上的正是这一层结构意义：在 grasp → lift 阶段，杯子与夹爪之间的 support relation 从稳定支撑退化为不稳定支撑，最终断裂。失败的本质不是某一个数值异常，而是低摩擦条件下支撑关系无法维持。">However, raw trajectory data only shows which signals changed. It does not directly explain why the physical interaction failed. AS-IR / PILa adds this missing structural layer: during the grasp → lift phase, the support relation between the gripper and the cup degrades from stable support to unstable support and eventually breaks. The root cause is not a single abnormal signal, but the failure to maintain support stability under low-friction conditions.</span>
 </p>
 
 <!-- Section 3.5: Physical Interaction Animation -->
