@@ -1,12 +1,16 @@
-# PILa Cup-Grasp MVP v0.4.0
+# PILa / AS-IR Cup-Grasp MVP
 
-PILa (Physical Interaction Language / 物理交互语言) is the public-facing language name.
-AS-IR (Action-State Intermediate Representation / 行动状态表示层) is the underlying intermediate representation layer.
+A minimal research prototype for Physical Interaction Language (PILa)
+and Action-State Intermediate Representation (AS-IR).
 
-In short:
-**PILa is the language. AS-IR is the IR substrate.**
+This demo illustrates how raw robot trajectory data can be transformed
+into structured physical interaction traces, including phases,
+physical relations, failure patches, learning updates, and
+cross-embodiment meaning transfer.
 
-PILa 负责表达物理交互意义，AS-IR 负责在底层组织 schema、runtime trace、adapter 和工具链。
+**这是一个面向具身智能的最小概念样机，用于演示：**
+**原始轨迹数据不仅可以记录"机器人做了什么"，还可以被转化为**
+**"物理交互中发生了什么"的结构化表示。**
 
 ## Architecture Overview
 
@@ -20,6 +24,8 @@ PILa 负责表达物理交互意义，AS-IR 负责在底层组织 schema、runti
 ![AS-IR Runtime](assets/figures/AS-IR-closed-loop-runtime.png)
 
 ## What This Demo Tests
+
+**Version**: v0.4.0
 
 This demo tests the starting hypothesis of PILa:
 
