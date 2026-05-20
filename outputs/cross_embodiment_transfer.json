@@ -1,0 +1,72 @@
+{
+  "asir_version": "0.3",
+  "source_trace_task": "pick_up_cup",
+  "source_failure_meaning": "support_degraded",
+  "source_root_cause": "grip_force_insufficient_under_low_friction",
+  "transfer_claim": "AS-IR transfers interaction meaning, not raw trajectory parameters.",
+  "not_transferred": [
+    "joint_trajectory",
+    "absolute_grip_force",
+    "source_contact_position"
+  ],
+  "domain_invariant_meaning": [
+    "intent",
+    "phase_order",
+    "support_relation"
+  ],
+  "robots": {
+    "two_finger_gripper": {
+      "robot_id": "two_finger_gripper",
+      "morphology_type": "parallel_jaw",
+      "contact_model": "rigid_two_point",
+      "source_failure_meaning": "support_degraded",
+      "source_root_cause": "grip_force_insufficient_under_low_friction",
+      "meaning_interpretation": {
+        "shared_meaning": "support relation degraded due to insufficient grip under low friction",
+        "robot_specific_reading": "two-point contact cannot generate enough friction; increase normal force or shift contact to higher-friction surface region"
+      },
+      "adapted_actions": [
+        "increase_grip_force",
+        "shift_contact_position"
+      ],
+      "restart_from_phase": "P3",
+      "force_control_mode": "position_servo_with_force_limit"
+    },
+    "three_finger_gripper": {
+      "robot_id": "three_finger_gripper",
+      "morphology_type": "adaptive_tripod",
+      "contact_model": "soft_three_point",
+      "source_failure_meaning": "support_degraded",
+      "source_root_cause": "grip_force_insufficient_under_low_friction",
+      "meaning_interpretation": {
+        "shared_meaning": "support relation degraded due to insufficient grip under low friction",
+        "robot_specific_reading": "two-contact grasp lacks form closure; activate third finger to create triangular support and redistribute contact forces"
+      },
+      "adapted_actions": [
+        "add_third_contact_point",
+        "redistribute_contact_force",
+        "stabilize_triangular_support"
+      ],
+      "restart_from_phase": "P3",
+      "force_control_mode": "impedance_control"
+    },
+    "suction_gripper": {
+      "robot_id": "suction_gripper",
+      "morphology_type": "vacuum_cup",
+      "contact_model": "surface_adhesion",
+      "source_failure_meaning": "support_degraded",
+      "source_root_cause": "grip_force_insufficient_under_low_friction",
+      "meaning_interpretation": {
+        "shared_meaning": "support relation degraded due to insufficient grip under low friction",
+        "robot_specific_reading": "vacuum seal is marginal on this surface; increase suction pressure, verify seal integrity, and reduce acceleration to avoid peel-off"
+      },
+      "adapted_actions": [
+        "increase_suction_pressure",
+        "check_surface_seal",
+        "reduce_lift_acceleration"
+      ],
+      "restart_from_phase": "P3",
+      "force_control_mode": "pressure_regulated"
+    }
+  }
+}

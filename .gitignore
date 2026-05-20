@@ -44,7 +44,13 @@ ehthumbs.db
 Thumbs.db
 
 # Project specific
-outputs/*.html
-outputs/*.png
-outputs/*.json
-!outputs/.gitkeep
+# Allow important outputs for demo purposes
+!outputs/asir_mvp_report.html
+!outputs/patch_report.md
+!outputs/assets/trajectory_plot.png
+!outputs/cross_embodiment_transfer.json
+
+# Exclude intermediate/temporary outputs
+outputs/*_failure.json
+outputs/*_success.json
+outputs/*.tmp.*
