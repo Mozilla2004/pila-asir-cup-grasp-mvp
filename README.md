@@ -8,6 +8,17 @@ In short:
 
 PILa 负责表达物理交互意义，AS-IR 负责在底层组织 schema、runtime trace、adapter 和工具链。
 
+## Architecture Overview
+
+### Why Embodied Intelligence Needs Physical Interaction Language
+![AS-IR Overview](assets/figures/AS-IR-overview-why-physical-interaction-language.png)
+
+### Three-Layer, 18-Module Architecture
+![AS-IR Architecture](assets/figures/AS-IR-architecture-3-layers-18-modules.png)
+
+### Closed-Loop Runtime System
+![AS-IR Runtime](assets/figures/AS-IR-closed-loop-runtime.png)
+
 ## What This Demo Tests
 
 This demo tests the starting hypothesis of PILa:
@@ -83,6 +94,11 @@ asir-cup-grasp-mvp/
 ├── requirements.txt
 ├── README.md
 ├── robot_profiles.json      # Robot morphology definitions
+├── assets/
+│   └── figures/             # Architecture diagrams
+│       ├── AS-IR-overview-why-physical-interaction-language.png
+│       ├── AS-IR-architecture-3-layers-18-modules.png
+│       └── AS-IR-closed-loop-runtime.png
 ├── src/
 │   ├── simulate.py          # Trajectory generation (failure + success)
 │   ├── asir_extract.py      # Raw trajectory → AS-IR trace
