@@ -11,6 +11,31 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
+def format_failure_hypothesis(patch: dict) -> str:
+    """Format failure hypothesis for HTML display, handling both old and new formats."""
+    hypothesis = patch.get('failure_hypothesis', patch.get('root_cause', 'unknown'))
+
+    if isinstance(hypothesis, dict):
+        # New format: structured failure hypothesis
+        primary = hypothesis.get('primary', 'unknown')
+        confidence = hypothesis.get('confidence', 'unknown')
+        evidence = hypothesis.get('evidence', [])
+
+        parts = [f"<strong>{primary}</strong>"]
+        if confidence != 'unknown':
+            parts.append(f"(confidence: {confidence})")
+        if evidence:
+            evidence_str = ", ".join(evidence[:2])  # Show first 2 evidence items
+            if len(evidence) > 2:
+                evidence_str += f" +{len(evidence)-2} more"
+            parts.append(f"<br><small>Evidence: {evidence_str}</small>")
+
+        return " ".join(parts)
+    else:
+        # Old format: simple string
+        return str(hypothesis)
+
+
 def plot_trajectories(
     failure: dict, success: dict, output_path: str
 ) -> None:
@@ -254,6 +279,9 @@ def _build_cross_embodiment_section(ce_transfer: dict) -> str:
     cards_html = "\n".join(cards)
 
     source = ce_transfer.get("source_root_cause", "unknown")
+    # Handle both old (string) and new (failure_hypothesis object) formats
+    if isinstance(source, dict):
+        source = source.get('primary', str(source))
     domain_inv = ", ".join(
         f"<code>{x}</code>" for x in ce_transfer.get("domain_invariant_meaning", [])
     )
@@ -597,7 +625,7 @@ def generate_html_report(
         <div style="background:#fff3cd;padding:16px;border-radius:8px;border:1px solid #ffc107;">
             <h3 style="margin-top:0;"><span data-en="Failure Patch" data-zh="失败补丁">Failure Patch</span> <code>{patch.get('patch_id', '?')}</code></h3>
             <p><strong><span data-en="Type:" data-zh="类型：">Type:</span></strong> {patch['failure_type']}<br>
-            <strong><span data-en="Root cause:" data-zh="根因：">Root cause:</span></strong> {patch['root_cause']}<br>
+            <strong><span data-en="Failure hypothesis:" data-zh="失败假设：">Failure hypothesis:</span></strong> {format_failure_hypothesis(patch)}<br>
             <strong><span data-en="Relation delta:" data-zh="关系退化：">Relation delta:</span></strong> support: {relation_str}<br>
             <strong><span data-en="Validation:" data-zh="验证：">Validation:</span></strong> <code>{patch.get('validation_status', 'pending')}</code></p>
             <p><strong><span data-en="Repair actions:" data-zh="修复动作：">Repair actions:</span></strong></p>

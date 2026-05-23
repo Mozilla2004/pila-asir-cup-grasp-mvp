@@ -66,7 +66,7 @@ def adapt_patch_for_robot(
         "contact_model": robot_profile["contact_model"],
         "source_failure_meaning": rule_key,
         "source_root_cause": (
-            asir_trace["failure_patches"][0]["root_cause"]
+            asir_trace["failure_patches"][0].get("failure_hypothesis", asir_trace["failure_patches"][0].get("root_cause", "unknown"))
             if asir_trace.get("failure_patches")
             else "unknown"
         ),
@@ -91,7 +91,7 @@ def run_cross_embodiment_transfer(
         "source_trace_task": asir_trace.get("task", "unknown"),
         "source_failure_meaning": rule_key,
         "source_root_cause": (
-            asir_trace["failure_patches"][0]["root_cause"]
+            asir_trace["failure_patches"][0].get("failure_hypothesis", asir_trace["failure_patches"][0].get("root_cause", "unknown"))
             if asir_trace.get("failure_patches")
             else "unknown"
         ),

@@ -2,6 +2,18 @@
 
 from __future__ import annotations
 
+# Import next action recommendation for v0.5
+try:
+    from .next_action import generate_next_action_recommendation
+except (ImportError, ValueError):
+    # Fallback if module not available or running as script
+    try:
+        from next_action import generate_next_action_recommendation
+    except ImportError:
+        # Final fallback
+        def generate_next_action_recommendation(asir_trace: dict) -> dict:
+            return {"recommendation_type": "continue_execution"}
+
 
 def _phase_slices(phase_hint: list[str]) -> list[tuple[str, int, int]]:
     """Return [(phase_name, start_idx, end_idx), ...] from phase_hint list."""
@@ -25,6 +37,33 @@ def _is_monotonic_decreasing(values: list[float], tolerance: float = 0.01) -> bo
 def _is_monotonic_increasing(values: list[float], tolerance: float = 0.01) -> bool:
     increases = sum(1 for i in range(1, len(values)) if values[i] > values[i - 1] - tolerance)
     return increases > len(values) * 0.6
+
+
+def _get_next_stage(current_stage_id: str) -> str:
+    """Get the next stage ID in the sequence."""
+    stage_order = ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8"]
+    try:
+        idx = stage_order.index(current_stage_id)
+        if idx + 1 < len(stage_order):
+            return stage_order[idx + 1]
+    except ValueError:
+        pass
+    return "end"
+
+
+def _get_stage_trigger(phase_name: str, component_states: dict) -> str:
+    """Get the trigger condition for stage transition."""
+    if phase_name == "approach":
+        return f"gripper_distance < 0.05 (current: {component_states['gripper_distance']:.3f})"
+    elif phase_name == "align":
+        return f"gripper_distance stable (current: {component_states['gripper_distance']:.3f})"
+    elif phase_name == "contact":
+        return f"contact_force > 1.0 (current: {component_states['contact_force']:.2f})"
+    elif phase_name == "grasp":
+        return f"grip_force applied, slip_score {component_states['slip_score']:.2f}"
+    elif phase_name == "lift":
+        return f"cup_height > 0.1 (current: {component_states['cup_height']:.3f})"
+    return "phase_complete"
 
 
 def _phase_risk(phase_name: str, status: str) -> str:
@@ -111,14 +150,57 @@ def extract_asir_trace(traj: dict) -> dict:
         pid = phase_ids.get(phase_name, "?")
         status, evidence = _diagnose_phase(traj, phase_name, start, end)
         risk = _phase_risk(phase_name, status)
+
+        # Extract component states for this stage (v0.5 enhancement)
+        component_states = {
+            "gripper_distance": traj["gripper_distance"][end-1] if end > 0 else 0,
+            "contact_force": traj["contact_force"][end-1] if end > 0 else 0,
+            "grip_force": traj["grip_force"][end-1] if end > 0 else 0,
+            "cup_height": traj["cup_height"][end-1] if end > 0 else 0,
+            "slip_score": traj["slip_score"][end-1] if end > 0 else 0,
+            "cup_tilt": traj["cup_tilt"][end-1] if end > 0 else 0,
+        }
+
+        # Extract stage-specific physical relations (v0.5)
+        stage_physical_relations = []
+        if phase_name in ["contact", "grasp", "lift"]:
+            stage_physical_relations.append({"type": "contact", "state": "established"})
+        if phase_name == "grasp" or phase_name == "lift":
+            relation_state = "established"
+            if status in ("failure", "warning"):
+                relation_state = "degraded"
+            if status == "failure" and phase_name == "lift":
+                relation_state = "broken"
+            stage_physical_relations.append({
+                "type": "support",
+                "state": relation_state,
+                "health_metrics": {
+                    "stability_score": 1.0 - component_states["slip_score"],
+                    "load_capacity": 0.5 if relation_state == "degraded" else 0.8
+                }
+            })
+
+        # Stage transition conditions (v0.5)
+        transition_condition = {
+            "from_stage": pid,
+            "to_next": _get_next_stage(pid),
+            "condition_met": status != "failure",
+            "trigger": _get_stage_trigger(phase_name, component_states)
+        }
+
         phases.append({
             "id": pid,
             "type": phase_name,
             "status": status,
             "risk": risk,
             "evidence": evidence,
+            # v0.5: Enhanced stage-by-stage information
+            "component_states": component_states,
+            "physical_relations": stage_physical_relations,
+            "transition_condition": transition_condition,
         })
-        # Track support relation degradation
+
+        # Track support relation degradation for legacy compatibility
         if phase_name == "grasp" and status in ("failure", "warning"):
             support_state = "degraded"
             support_reason = "low_friction_slip"
@@ -166,7 +248,16 @@ def extract_asir_trace(traj: dict) -> dict:
         failure_patches.append({
             "patch_id": "F1",
             "failure_type": "slip",
-            "root_cause": "grip_force_insufficient_under_low_friction",
+            "failure_hypothesis": {
+                "primary": "insufficient_normal_force_under_low_friction",
+                "confidence": "medium",
+                "evidence": ["elevating_slip_score", "increasing_tilt", "low_friction_condition"],
+                "alternative_hypotheses": [
+                    "acceleration_too_high",
+                    "contact_position_unstable",
+                    "object_surface_properties_changed"
+                ]
+            },
             "relation_delta": {
                 "support": ["attempted", "degraded", "broken"],
             },
@@ -258,6 +349,11 @@ def extract_asir_trace(traj: dict) -> dict:
             "transfer_confidence": 0.78,
         },
         "learning_update": learning_update,
+        "next_action_recommendation": generate_next_action_recommendation({  # v0.5
+            "phases": phases,
+            "runtime": {"risk_policy": {"level": risk_level, "reason": risk_reason}},
+            "failure_patches": failure_patches
+        }),
         "representation_gain": representation_gain,
     }
 

@@ -1,16 +1,30 @@
-# PILa / AS-IR Cup-Grasp MVP
+# PILa / AS-IR Cup-Grasp MVP v0.5
 
-A minimal research prototype for Physical Interaction Language (PILa)
-and Action-State Intermediate Representation (AS-IR).
+**PILa = Physical Interaction Language (物理交互语言层)**
+**AS-IR = Action-State Intermediate Representation (行动—状态中间表示层)**
 
-This demo illustrates how raw robot trajectory data can be transformed
-into structured physical interaction traces, including phases,
-physical relations, failure patches, learning updates, and
-cross-embodiment meaning transfer.
+## 核心定位
 
-**这是一个面向具身智能的最小概念样机，用于演示：**
-**原始轨迹数据不仅可以记录"机器人做了什么"，还可以被转化为**
-**"物理交互中发生了什么"的结构化表示。**
+这是一个演示**物理交互运行时语义追踪**的最小研究原型。
+
+PILa **不是** JSON schema、数据格式标准、报告生成器或失败诊断工具。
+AS-IR **不是** 失败报告生成器、日志记录系统、数据可视化工具或事后分析器。
+
+**PILa / AS-IR 是什么**：
+- ✅ PILa：定义物理交互的**语义层**（"物理交互中有什么样的意义结构"）
+- ✅ AS-IR：运行时**结构化状态轨迹**（"从人类意图到物理反馈的完整语义链路"）
+- ✅ 让 VLA / World Model / RL / Controller 的过程更可观测、可验证、可修复
+- ✅ 从"黑盒执行"变为"可审计的语义过程"
+
+**当前 MVP 展示**：
+- 8 个阶段的**Stage-by-Stage Physical Interaction Runtime Trace**
+- 基于证据的**Failure Hypothesis**（而非绝对因果）
+- 结构化的**Patch Suggestion** 与 **Next Action Recommendation**
+- **跨机器人概念性映射**（Embodiment Adapter）
+
+---
+
+## 架构概览
 
 ## Architecture Overview
 
@@ -23,11 +37,39 @@ cross-embodiment meaning transfer.
 ### Closed-Loop Runtime System
 ![AS-IR Runtime](assets/figures/AS-IR-closed-loop-runtime.png)
 
-## What This Demo Tests
+## 本 Demo 测试什么
 
-**Version**: v0.4.0
+**Version**: v0.5-stage-by-stage-trace
 
-This demo tests the starting hypothesis of PILa:
+本 demo 测试 PILa 的核心假设：
+
+> 原始轨迹数据记录"机器人做了什么"，
+> 而 AS-IR 通过 PILa 语义表达"物理交互中发生了什么"。
+
+**本 demo 能够证明**：
+- ✅ 结构化物理交互表示的可行性
+- ✅ 阶段化状态追踪的概念（Stage P0-P8）
+- ✅ 失败假设生成和验证流程
+- ✅ 跨机器人的概念性映射
+
+**本 demo 尚未证明**：
+- ❌ 完全自动的阶段发现
+- ❌ 真实跨机器人迁移
+- ❌ 通用具身智能
+- ❌ 替代 VLA / World Model / RL / Controller
+- ❌ 真实世界的因果证明
+
+---
+
+## 版本历史
+
+### v0.5 (Current)
+- **焦点**: Stage-by-Stage Physical Interaction Runtime Trace
+- **新增**: 实时语义追踪、基于假设的推理、Next Action Recommendation
+
+### v0.4 (Preserved)
+- **焦点**: Failure Diagnosis Report
+- **用途**: 事后分析和可视化
 
 > Raw robot trajectories record **what the robot did**, while PILa uses AS-IR to represent **what happened in the physical interaction**.
 

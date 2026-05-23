@@ -36,10 +36,20 @@ def generate_patch_report(
             if isinstance(relation_delta, dict) and "support" in relation_delta
             else str(relation_delta)
         )
+        # Handle both old (root_cause string) and new (failure_hypothesis object) formats
+        hypothesis = patch.get('failure_hypothesis', patch.get('root_cause', 'unknown'))
+        if isinstance(hypothesis, dict):
+            hypothesis_text = hypothesis.get('primary', 'unknown')
+            confidence = hypothesis.get('confidence', 'unknown')
+            hypothesis_display = f"{hypothesis_text} (confidence: {confidence})"
+        else:
+            hypothesis_text = hypothesis
+            hypothesis_display = str(hypothesis)
+
         lines += [
             f"- **Patch ID**: {patch.get('patch_id', '?')}",
             f"- **Failure type**: {patch['failure_type']}",
-            f"- **Root cause**: {patch['root_cause']}",
+            f"- **Failure hypothesis**: {hypothesis_display}",
             f"- **Relation delta**: {relation_str}",
             f"- **Validation status**: {patch.get('validation_status', 'pending')}",
             "",
