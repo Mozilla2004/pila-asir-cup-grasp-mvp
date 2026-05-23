@@ -4,7 +4,7 @@
 
 - **Patch ID**: F1
 - **Failure type**: slip
-- **Root cause**: grip_force_insufficient_under_low_friction
+- **Failure hypothesis**: insufficient_normal_force_under_low_friction (confidence: medium)
 - **Relation delta**: attempted -> degraded -> broken
 - **Validation status**: passed
 

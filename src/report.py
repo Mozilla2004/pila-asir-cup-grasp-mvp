@@ -36,6 +36,129 @@ def format_failure_hypothesis(patch: dict) -> str:
         return str(hypothesis)
 
 
+def _render_stage_by_stage_trace(failure_trace: dict, success_trace: dict) -> str:
+    """Generate HTML for Stage-by-Stage AS-IR Runtime Trace section (v0.5)."""
+
+    def format_phase_card(phase: dict, run_type: str) -> str:
+        """Format a single phase as a card."""
+        phase_id = phase.get('id', '?')
+        phase_type = phase.get('type', 'unknown')
+        status = phase.get('status', 'unknown')
+        risk = phase.get('risk', 'UNKNOWN')
+
+        # Status color
+        status_color = {
+            'success': '#28a745',
+            'warning': '#ffc107',
+            'failure': '#dc3545',
+            'unknown': '#6c757d'
+        }.get(status, '#6c757d')
+
+        # Component states
+        component_states = phase.get('component_states', {})
+        states_html = ""
+        if component_states:
+            states_html = "<div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'>"
+            for key, value in component_states.items():
+                if isinstance(value, float):
+                    states_html += f"<li><code>{key}</code>: {value:.3f}</li>"
+                else:
+                    states_html += f"<li><code>{key}</code>: {value}</li>"
+            states_html += "</ul></div>"
+
+        # Physical relations
+        physical_relations = phase.get('physical_relations', [])
+        relations_html = ""
+        if physical_relations:
+            relations_html = "<div style='margin-top:8px;'><strong>Physical Relations:</strong><ul style='margin:4px 0; padding-left:16px;'>"
+            for rel in physical_relations:
+                rel_type = rel.get('type', 'unknown')
+                rel_state = rel.get('state', 'unknown')
+                relations_html += f"<li><code>{rel_type}</code>: {rel_state}</li>"
+            relations_html += "</ul></div>"
+
+        # Risk signals
+        risk_signals = phase.get('risk_signals', [])
+        risk_signals_html = ""
+        if risk_signals:
+            risk_signals_html = "<div style='margin-top:8px;'><strong>Risk Signals:</strong><ul style='margin:4px 0; padding-left:16px;'>"
+            for signal in risk_signals:
+                signal_type = signal.get('type', 'unknown')
+                signal_value = signal.get('value', 'N/A')
+                signal_severity = signal.get('severity', signal.get('status', 'unknown'))
+                risk_signals_html += f"<li><code>{signal_type}</code>: {signal_value} ({signal_severity})</li>"
+            risk_signals_html += "</ul></div>"
+
+        # Transition condition
+        transition = phase.get('transition_condition', {})
+        transition_html = ""
+        if transition:
+            from_stage = transition.get('from_stage', '?')
+            to_next = transition.get('to_next', 'end')
+            condition_met = transition.get('condition_met', False)
+            trigger = transition.get('trigger', 'unknown')
+
+            transition_status = "✅" if condition_met else "❌"
+            transition_html = f"""
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #{"28a745" if condition_met else "dc3545"};'>
+                <strong>Transition:</strong> {from_stage} → {to_next} {transition_status}<br>
+                <small>Trigger: {trigger}</small>
+            </div>
+            """
+
+        return f"""
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>{phase_id} - {phase_type.title()}</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:{status_color}; color:white;'>{status.upper()}</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#{"ff6b6b" if risk == "ORANGE" else "#ffd93d" if risk == "YELLOW" else "#6bcf7f"}; color:#333;'>{risk}</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>{run_type}</div>
+            </div>
+            {states_html}
+            {relations_html}
+            {risk_signals_html}
+            {transition_html}
+        </div>
+        """
+
+    # Generate comparison for each phase
+    failure_phases = failure_trace.get('phases', [])
+    success_phases = success_trace.get('phases', [])
+
+    comparison_html = ""
+    for fail_phase, succ_phase in zip(failure_phases, success_phases):
+        comparison_html += f"""
+        <div style='margin:16px 0;'>
+            <h4 style='margin:0 0 8px 0;'>Phase {fail_phase.get('id', '?')} - {fail_phase.get('type', 'unknown').title()}</h4>
+            <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
+                <div>{format_phase_card(fail_phase, 'Failure Run')}</div>
+                <div>{format_phase_card(succ_phase, 'Patched Run')}</div>
+            </div>
+        </div>
+        """
+
+    return f"""
+    <div class="card" style="margin:16px 0;">
+        <h3 style="margin-top:0;">Stage-by-Stage AS-IR Runtime Trace (v0.5)</h3>
+        <p>Side-by-side comparison of failure vs patched runs, showing component states, physical relations, risk signals, and transition conditions for each stage.</p>
+
+        {comparison_html}
+
+        <div style="margin-top:16px; padding:12px; background:#f8f9fa; border-radius:8px; font-size:14px;">
+            <strong>Key observations:</strong>
+            <ul style="margin:8px 0; padding-left:20px;">
+                <li><strong>Component states</strong> show exact sensor values at stage boundaries</li>
+                <li><strong>Physical relations</strong> track contact, support, and proximity states dynamically</li>
+                <li><strong>Risk signals</strong> provide early warning before stage failures occur</li>
+                <li><strong>Transition conditions</strong> explain why stages succeed or fail to progress</li>
+            </ul>
+        </div>
+    </div>
+    """
+
+
 def plot_trajectories(
     failure: dict, success: dict, output_path: str
 ) -> None:
@@ -876,8 +999,12 @@ runtime risks and engineering adapters.</span>
 <p><span data-en="PILa uses AS-IR to reveal the interaction structure hidden in raw signals." data-zh="PILa 通过 AS-IR，把原始信号中隐藏的交互结构显影出来。">PILa uses AS-IR to reveal the interaction structure hidden in raw signals.</span></p>
 {_render_meaning_extraction_animation()}
 
-<!-- Section 6: Patch & Re-execution -->
-<h2>8. <span data-en="Patch &amp; Re-execution" data-zh="补丁与重新执行">Patch &amp; Re-execution</span></h2>
+<!-- Section 7: Stage-by-Stage AS-IR Runtime Trace -->
+<h2>8. <span data-en="Stage-by-Stage AS-IR Runtime Trace" data-zh="阶段化 AS-IR 运行时追踪">Stage-by-Stage AS-IR Runtime Trace (v0.5)</span></h2>
+{_render_stage_by_stage_trace(failure_trace, success_trace)}
+
+<!-- Section 8: Patch & Re-execution -->
+<h2>9. <span data-en="Patch &amp; Re-execution" data-zh="补丁与重新执行">Patch &amp; Re-execution</span></h2>
 <p><span data-en="Failure patch F1 changes the second run and validates the repair hypothesis." data-zh="失败补丁 F1 改变了第二次执行，并验证了修复假设。">Failure patch F1 changes the second run and validates the repair hypothesis.</span></p>
 
 <table>
@@ -889,8 +1016,8 @@ runtime risks and engineering adapters.</span>
     </tbody>
 </table>
 
-<!-- Section 7: AS-IR Structure View (Success) -->
-<h2>9. <span data-en="AS-IR Structure View (Patched Run)" data-zh="AS-IR 结构视图（补丁后执行）">AS-IR Structure View (Patched Run)</span></h2>
+<!-- Section 9: AS-IR Structure View (Success) -->
+<h2>10. <span data-en="AS-IR Structure View (Patched Run)" data-zh="AS-IR 结构视图（补丁后执行）">AS-IR Structure View (Patched Run)</span></h2>
 
 <div class="grid">
 <div class="card">
@@ -934,8 +1061,8 @@ runtime risks and engineering adapters.</span>
     {success_trace['transferability']['transfer_confidence']}</p>
 </div>
 
-<!-- Section 8: Representation Gain -->
-<h2>10. <span data-en="Representation Gain" data-zh="表示增益">Representation Gain</span></h2>
+<!-- Section 10: Representation Gain -->
+<h2>11. <span data-en="Representation Gain" data-zh="表示增益">Representation Gain</span></h2>
 <div class="card">
 <table>
     <thead><tr><th><span data-en="Dimension" data-zh="维度">Dimension</span></th><th><span data-en="Value" data-zh="值">Value</span></th></tr></thead>
@@ -943,14 +1070,14 @@ runtime risks and engineering adapters.</span>
 </table>
 </div>
 
-<!-- Section 9: Cross-Embodiment Meaning Transfer -->
-<h2>11. <span data-en="Cross-Embodiment Meaning Transfer" data-zh="跨本体意义迁移">Cross-Embodiment Meaning Transfer</span></h2>
+<!-- Section 11: Cross-Embodiment Meaning Transfer -->
+<h2>12. <span data-en="Cross-Embodiment Meaning Transfer" data-zh="跨本体意义迁移">Cross-Embodiment Meaning Transfer</span></h2>
 <p><span data-en="PILa shares the interaction meaning; each robot uses its own adapter to generate an embodiment-specific patch." data-zh="PILa 共享交互意义；每个机器人通过自己的适配层生成本体专属补丁。">PILa shares the interaction meaning; each robot uses its own adapter to generate an embodiment-specific patch.</span></p>
 {_render_cross_embodiment_animation()}
 {_build_cross_embodiment_section(cross_embodiment_transfer) if cross_embodiment_transfer else '<div class="card"><p>Cross-embodiment transfer data not available.</p></div>'}
 
-<!-- Section 10: Key Hypothesis -->
-<h2>12. <span data-en="Key Hypothesis" data-zh="核心假说">Key Hypothesis</span></h2>
+<!-- Section 12: Key Hypothesis -->
+<h2>13. <span data-en="Key Hypothesis" data-zh="核心假说">Key Hypothesis</span></h2>
 <div class="hypothesis">
 <p>
 <strong><span data-en="This MVP does not prove PILa solves embodied intelligence." data-zh="这个 MVP 并不证明 PILa 已经解决具身智能问题。">This MVP does not prove PILa solves embodied intelligence.</span></strong><br>
@@ -972,8 +1099,8 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
 </ul>
 </div>
 
-<!-- Section 12.5: Glossary -->
-<h2>13. <span data-en="Glossary" data-zh="术语表">Glossary</span></h2>
+<!-- Section 13: Glossary -->
+<h2>14. <span data-en="Glossary" data-zh="术语表">Glossary</span></h2>
 <p><span data-en="This demo uses PILa as the language name and AS-IR as the technical IR layer." data-zh="本 demo 使用 PILa 作为语言名，AS-IR 作为底层技术表示层。">This demo uses PILa as the language name and AS-IR as the technical IR layer.</span></p>
 <table>
     <thead><tr>
@@ -1010,7 +1137,7 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
 </table>
 
 <!-- Section 14: AS-IR Trace JSON -->
-<h2>14. <span data-en="Full AS-IR Trace JSON" data-zh="完整 AS-IR 追踪 JSON">Full AS-IR Trace JSON</span></h2>
+<h2>15. <span data-en="Full AS-IR Trace JSON" data-zh="完整 AS-IR 追踪 JSON">Full AS-IR Trace JSON</span></h2>
 <p><strong><span data-en="Failure trace:" data-zh="失败追踪：">Failure trace:</span></strong></p>
 <pre>{json.dumps(failure_trace, indent=2)}</pre>
 

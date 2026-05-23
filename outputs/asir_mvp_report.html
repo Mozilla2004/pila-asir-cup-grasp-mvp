@@ -304,7 +304,7 @@ border-radius:8px;overflow:hidden;margin-top:8px;border:1px solid #dee2e6;">
         <div style="background:#fff3cd;padding:16px;border-radius:8px;border:1px solid #ffc107;">
             <h3 style="margin-top:0;"><span data-en="Failure Patch" data-zh="失败补丁">Failure Patch</span> <code>F1</code></h3>
             <p><strong><span data-en="Type:" data-zh="类型：">Type:</span></strong> slip<br>
-            <strong><span data-en="Root cause:" data-zh="根因：">Root cause:</span></strong> grip_force_insufficient_under_low_friction<br>
+            <strong><span data-en="Failure hypothesis:" data-zh="失败假设：">Failure hypothesis:</span></strong> <strong>insufficient_normal_force_under_low_friction</strong> (confidence: medium) <br><small>Evidence: elevating_slip_score, increasing_tilt +1 more</small><br>
             <strong><span data-en="Relation delta:" data-zh="关系退化：">Relation delta:</span></strong> support: attempted &rarr; degraded &rarr; broken<br>
             <strong><span data-en="Validation:" data-zh="验证：">Validation:</span></strong> <code>passed</code></p>
             <p><strong><span data-en="Repair actions:" data-zh="修复动作：">Repair actions:</span></strong></p>
@@ -407,8 +407,269 @@ flex-wrap:wrap;">
 </script>
 </div>
 
-<!-- Section 6: Patch & Re-execution -->
-<h2>8. <span data-en="Patch &amp; Re-execution" data-zh="补丁与重新执行">Patch &amp; Re-execution</span></h2>
+<!-- Section 7: Stage-by-Stage AS-IR Runtime Trace -->
+<h2>8. <span data-en="Stage-by-Stage AS-IR Runtime Trace" data-zh="阶段化 AS-IR 运行时追踪">Stage-by-Stage AS-IR Runtime Trace (v0.5)</span></h2>
+
+    <div class="card" style="margin:16px 0;">
+        <h3 style="margin-top:0;">Stage-by-Stage AS-IR Runtime Trace (v0.5)</h3>
+        <p>Side-by-side comparison of failure vs patched runs, showing component states, physical relations, risk signals, and transition conditions for each stage.</p>
+
+        
+        <div style='margin:16px 0;'>
+            <h4 style='margin:0 0 8px 0;'>Phase P1 - Approach</h4>
+            <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P1 - Approach</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Failure Run</div>
+            </div>
+            <div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>gripper_distance</code>: 0.051</li><li><code>contact_force</code>: 0.000</li><li><code>grip_force</code>: 0.000</li><li><code>cup_height</code>: 0.000</li><li><code>slip_score</code>: 0.000</li><li><code>cup_tilt</code>: 0.000</li></ul></div>
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P1 → P2 ✅<br>
+                <small>Trigger: gripper_distance < 0.05 (current: 0.051)</small>
+            </div>
+            
+        </div>
+        </div>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P1 - Approach</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
+            </div>
+            <div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>gripper_distance</code>: 0.048</li><li><code>contact_force</code>: 0.000</li><li><code>grip_force</code>: 0.000</li><li><code>cup_height</code>: 0.000</li><li><code>slip_score</code>: 0.000</li><li><code>cup_tilt</code>: 0.000</li></ul></div>
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P1 → P2 ✅<br>
+                <small>Trigger: gripper_distance < 0.05 (current: 0.048)</small>
+            </div>
+            
+        </div>
+        </div>
+            </div>
+        </div>
+        
+        <div style='margin:16px 0;'>
+            <h4 style='margin:0 0 8px 0;'>Phase P2 - Align</h4>
+            <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P2 - Align</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Failure Run</div>
+            </div>
+            <div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>gripper_distance</code>: 0.019</li><li><code>contact_force</code>: 0.000</li><li><code>grip_force</code>: 0.000</li><li><code>cup_height</code>: 0.000</li><li><code>slip_score</code>: 0.000</li><li><code>cup_tilt</code>: 0.000</li></ul></div>
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P2 → P3 ✅<br>
+                <small>Trigger: gripper_distance stable (current: 0.019)</small>
+            </div>
+            
+        </div>
+        </div>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P2 - Align</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
+            </div>
+            <div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>gripper_distance</code>: 0.016</li><li><code>contact_force</code>: 0.000</li><li><code>grip_force</code>: 0.000</li><li><code>cup_height</code>: 0.000</li><li><code>slip_score</code>: 0.000</li><li><code>cup_tilt</code>: 0.000</li></ul></div>
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P2 → P3 ✅<br>
+                <small>Trigger: gripper_distance stable (current: 0.016)</small>
+            </div>
+            
+        </div>
+        </div>
+            </div>
+        </div>
+        
+        <div style='margin:16px 0;'>
+            <h4 style='margin:0 0 8px 0;'>Phase P3 - Contact</h4>
+            <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P3 - Contact</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Failure Run</div>
+            </div>
+            <div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>gripper_distance</code>: 0.001</li><li><code>contact_force</code>: 2.506</li><li><code>grip_force</code>: 0.000</li><li><code>cup_height</code>: 0.000</li><li><code>slip_score</code>: 0.000</li><li><code>cup_tilt</code>: 0.000</li></ul></div>
+            <div style='margin-top:8px;'><strong>Physical Relations:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>contact</code>: established</li></ul></div>
+            <div style='margin-top:8px;'><strong>Risk Signals:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>contact_establishment</code>: 2.5058 (established)</li></ul></div>
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P3 → P4 ✅<br>
+                <small>Trigger: contact_force > 1.0 (current: 2.51)</small>
+            </div>
+            
+        </div>
+        </div>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P3 - Contact</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
+            </div>
+            <div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>gripper_distance</code>: -0.001</li><li><code>contact_force</code>: 2.740</li><li><code>grip_force</code>: 0.000</li><li><code>cup_height</code>: 0.000</li><li><code>slip_score</code>: 0.000</li><li><code>cup_tilt</code>: 0.000</li></ul></div>
+            <div style='margin-top:8px;'><strong>Physical Relations:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>contact</code>: established</li></ul></div>
+            <div style='margin-top:8px;'><strong>Risk Signals:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>contact_establishment</code>: 2.7395 (established)</li></ul></div>
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P3 → P4 ✅<br>
+                <small>Trigger: contact_force > 1.0 (current: 2.74)</small>
+            </div>
+            
+        </div>
+        </div>
+            </div>
+        </div>
+        
+        <div style='margin:16px 0;'>
+            <h4 style='margin:0 0 8px 0;'>Phase P4 - Grasp</h4>
+            <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P4 - Grasp</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#ffc107; color:white;'>WARNING</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##ffd93d; color:#333;'>YELLOW</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Failure Run</div>
+            </div>
+            <div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>gripper_distance</code>: 0.000</li><li><code>contact_force</code>: 2.453</li><li><code>grip_force</code>: 2.985</li><li><code>cup_height</code>: 0.000</li><li><code>slip_score</code>: 0.569</li><li><code>cup_tilt</code>: 0.000</li></ul></div>
+            <div style='margin-top:8px;'><strong>Physical Relations:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>contact</code>: established</li><li><code>support</code>: degraded</li></ul></div>
+            <div style='margin-top:8px;'><strong>Risk Signals:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>slip_risk</code>: 0.5687 (medium)</li><li><code>force_stability</code>: stable (unknown)</li></ul></div>
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P4 → P5 ✅<br>
+                <small>Trigger: grip_force applied, slip_score 0.57</small>
+            </div>
+            
+        </div>
+        </div>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P4 - Grasp</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
+            </div>
+            <div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>gripper_distance</code>: 0.000</li><li><code>contact_force</code>: 2.793</li><li><code>grip_force</code>: 6.476</li><li><code>cup_height</code>: 0.000</li><li><code>slip_score</code>: 0.029</li><li><code>cup_tilt</code>: 0.000</li></ul></div>
+            <div style='margin-top:8px;'><strong>Physical Relations:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>contact</code>: established</li><li><code>support</code>: established</li></ul></div>
+            <div style='margin-top:8px;'><strong>Risk Signals:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>slip_risk</code>: 0.0287 (medium)</li><li><code>force_stability</code>: stable (unknown)</li></ul></div>
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P4 → P5 ✅<br>
+                <small>Trigger: grip_force applied, slip_score 0.03</small>
+            </div>
+            
+        </div>
+        </div>
+            </div>
+        </div>
+        
+        <div style='margin:16px 0;'>
+            <h4 style='margin:0 0 8px 0;'>Phase P5 - Lift</h4>
+            <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P5 - Lift</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#dc3545; color:white;'>FAILURE</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#ff6b6b; color:#333;'>ORANGE</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Failure Run</div>
+            </div>
+            <div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>gripper_distance</code>: 0.000</li><li><code>contact_force</code>: 0.290</li><li><code>grip_force</code>: 2.916</li><li><code>cup_height</code>: 0.007</li><li><code>slip_score</code>: 0.885</li><li><code>cup_tilt</code>: 15.079</li></ul></div>
+            <div style='margin-top:8px;'><strong>Physical Relations:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>contact</code>: established</li><li><code>support</code>: broken</li></ul></div>
+            <div style='margin-top:8px;'><strong>Risk Signals:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>slip_risk</code>: 0.8848 (critical)</li><li><code>tilt_risk</code>: 15.079 (critical)</li><li><code>height_progress</code>: 0.00706 (insufficient)</li></ul></div>
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #dc3545;'>
+                <strong>Transition:</strong> P5 → P6 ❌<br>
+                <small>Trigger: cup_height > 0.1 (current: 0.007)</small>
+            </div>
+            
+        </div>
+        </div>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P5 - Lift</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
+            </div>
+            <div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>gripper_distance</code>: 0.000</li><li><code>contact_force</code>: 2.968</li><li><code>grip_force</code>: 6.522</li><li><code>cup_height</code>: 0.221</li><li><code>slip_score</code>: 0.053</li><li><code>cup_tilt</code>: 4.117</li></ul></div>
+            <div style='margin-top:8px;'><strong>Physical Relations:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>contact</code>: established</li><li><code>support</code>: established</li></ul></div>
+            <div style='margin-top:8px;'><strong>Risk Signals:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>slip_risk</code>: 0.0529 (high)</li><li><code>tilt_risk</code>: 4.117 (medium)</li><li><code>height_progress</code>: 0.22148 (insufficient)</li></ul></div>
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P5 → P6 ✅<br>
+                <small>Trigger: cup_height > 0.1 (current: 0.221)</small>
+            </div>
+            
+        </div>
+        </div>
+            </div>
+        </div>
+        
+
+        <div style="margin-top:16px; padding:12px; background:#f8f9fa; border-radius:8px; font-size:14px;">
+            <strong>Key observations:</strong>
+            <ul style="margin:8px 0; padding-left:20px;">
+                <li><strong>Component states</strong> show exact sensor values at stage boundaries</li>
+                <li><strong>Physical relations</strong> track contact, support, and proximity states dynamically</li>
+                <li><strong>Risk signals</strong> provide early warning before stage failures occur</li>
+                <li><strong>Transition conditions</strong> explain why stages succeed or fail to progress</li>
+            </ul>
+        </div>
+    </div>
+    
+
+<!-- Section 8: Patch & Re-execution -->
+<h2>9. <span data-en="Patch &amp; Re-execution" data-zh="补丁与重新执行">Patch &amp; Re-execution</span></h2>
 <p><span data-en="Failure patch F1 changes the second run and validates the repair hypothesis." data-zh="失败补丁 F1 改变了第二次执行，并验证了修复假设。">Failure patch F1 changes the second run and validates the repair hypothesis.</span></p>
 
 <table>
@@ -420,8 +681,8 @@ flex-wrap:wrap;">
     </tbody>
 </table>
 
-<!-- Section 7: AS-IR Structure View (Success) -->
-<h2>9. <span data-en="AS-IR Structure View (Patched Run)" data-zh="AS-IR 结构视图（补丁后执行）">AS-IR Structure View (Patched Run)</span></h2>
+<!-- Section 9: AS-IR Structure View (Success) -->
+<h2>10. <span data-en="AS-IR Structure View (Patched Run)" data-zh="AS-IR 结构视图（补丁后执行）">AS-IR Structure View (Patched Run)</span></h2>
 
 <div class="grid">
 <div class="card">
@@ -465,8 +726,8 @@ flex-wrap:wrap;">
     0.78</p>
 </div>
 
-<!-- Section 8: Representation Gain -->
-<h2>10. <span data-en="Representation Gain" data-zh="表示增益">Representation Gain</span></h2>
+<!-- Section 10: Representation Gain -->
+<h2>11. <span data-en="Representation Gain" data-zh="表示增益">Representation Gain</span></h2>
 <div class="card">
 <table>
     <thead><tr><th><span data-en="Dimension" data-zh="维度">Dimension</span></th><th><span data-en="Value" data-zh="值">Value</span></th></tr></thead>
@@ -474,8 +735,8 @@ flex-wrap:wrap;">
 </table>
 </div>
 
-<!-- Section 9: Cross-Embodiment Meaning Transfer -->
-<h2>11. <span data-en="Cross-Embodiment Meaning Transfer" data-zh="跨本体意义迁移">Cross-Embodiment Meaning Transfer</span></h2>
+<!-- Section 11: Cross-Embodiment Meaning Transfer -->
+<h2>12. <span data-en="Cross-Embodiment Meaning Transfer" data-zh="跨本体意义迁移">Cross-Embodiment Meaning Transfer</span></h2>
 <p><span data-en="PILa shares the interaction meaning; each robot uses its own adapter to generate an embodiment-specific patch." data-zh="PILa 共享交互意义；每个机器人通过自己的适配层生成本体专属补丁。">PILa shares the interaction meaning; each robot uses its own adapter to generate an embodiment-specific patch.</span></p>
 
 <div style="margin:16px 0;">
@@ -556,7 +817,7 @@ border:1px solid #339af0;background:#fff;color:#339af0;cursor:pointer;font-size:
 </div>
 
 <div class="card">
-<p><strong><span data-en="Source failure meaning:" data-zh="源头失败意义：">Source failure meaning:</span></strong> <code>grip_force_insufficient_under_low_friction</code><br>
+<p><strong><span data-en="Source failure meaning:" data-zh="源头失败意义：">Source failure meaning:</span></strong> <code>insufficient_normal_force_under_low_friction</code><br>
 <strong><span data-en="Domain-invariant meaning:" data-zh="域不变意义：">Domain-invariant meaning:</span></strong> <code>intent</code>, <code>phase_order</code>, <code>support_relation</code><br>
 <strong><span data-en="Not transferred:" data-zh="未迁移：">Not transferred:</span></strong> <code>joint_trajectory</code>, <code>absolute_grip_force</code>, <code>source_contact_position</code></p>
 </div>
@@ -574,8 +835,8 @@ border:1px solid #339af0;background:#fff;color:#339af0;cursor:pointer;font-size:
 </div>
 
 
-<!-- Section 10: Key Hypothesis -->
-<h2>12. <span data-en="Key Hypothesis" data-zh="核心假说">Key Hypothesis</span></h2>
+<!-- Section 12: Key Hypothesis -->
+<h2>13. <span data-en="Key Hypothesis" data-zh="核心假说">Key Hypothesis</span></h2>
 <div class="hypothesis">
 <p>
 <strong><span data-en="This MVP does not prove PILa solves embodied intelligence." data-zh="这个 MVP 并不证明 PILa 已经解决具身智能问题。">This MVP does not prove PILa solves embodied intelligence.</span></strong><br>
@@ -597,8 +858,8 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
 </ul>
 </div>
 
-<!-- Section 12.5: Glossary -->
-<h2>13. <span data-en="Glossary" data-zh="术语表">Glossary</span></h2>
+<!-- Section 13: Glossary -->
+<h2>14. <span data-en="Glossary" data-zh="术语表">Glossary</span></h2>
 <p><span data-en="This demo uses PILa as the language name and AS-IR as the technical IR layer." data-zh="本 demo 使用 PILa 作为语言名，AS-IR 作为底层技术表示层。">This demo uses PILa as the language name and AS-IR as the technical IR layer.</span></p>
 <table>
     <thead><tr>
@@ -635,7 +896,7 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
 </table>
 
 <!-- Section 14: AS-IR Trace JSON -->
-<h2>14. <span data-en="Full AS-IR Trace JSON" data-zh="完整 AS-IR 追踪 JSON">Full AS-IR Trace JSON</span></h2>
+<h2>15. <span data-en="Full AS-IR Trace JSON" data-zh="完整 AS-IR 追踪 JSON">Full AS-IR Trace JSON</span></h2>
 <p><strong><span data-en="Failure trace:" data-zh="失败追踪：">Failure trace:</span></strong></p>
 <pre>{
   "asir_version": "0.3",
@@ -667,6 +928,22 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
       "risk": "GREEN",
       "evidence": {
         "gripper_distance": "decreasing"
+      },
+      "component_states": {
+        "gripper_distance": 0.0514,
+        "contact_force": 0.0,
+        "grip_force": 0.0,
+        "cup_height": 0.0,
+        "slip_score": 0.0,
+        "cup_tilt": 0.0
+      },
+      "physical_relations": [],
+      "risk_signals": [],
+      "transition_condition": {
+        "from_stage": "P1",
+        "to_next": "P2",
+        "condition_met": true,
+        "trigger": "gripper_distance < 0.05 (current: 0.051)"
       }
     },
     {
@@ -676,6 +953,22 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
       "risk": "GREEN",
       "evidence": {
         "gripper_distance": "stabilized"
+      },
+      "component_states": {
+        "gripper_distance": 0.01914,
+        "contact_force": 0.0,
+        "grip_force": 0.0,
+        "cup_height": 0.0,
+        "slip_score": 0.0,
+        "cup_tilt": 0.0
+      },
+      "physical_relations": [],
+      "risk_signals": [],
+      "transition_condition": {
+        "from_stage": "P2",
+        "to_next": "P3",
+        "condition_met": true,
+        "trigger": "gripper_distance stable (current: 0.019)"
       }
     },
     {
@@ -685,6 +978,34 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
       "risk": "GREEN",
       "evidence": {
         "contact_force": "increased"
+      },
+      "component_states": {
+        "gripper_distance": 0.00062,
+        "contact_force": 2.5058,
+        "grip_force": 0.0,
+        "cup_height": 0.0,
+        "slip_score": 0.0,
+        "cup_tilt": 0.0
+      },
+      "physical_relations": [
+        {
+          "type": "contact",
+          "state": "established"
+        }
+      ],
+      "risk_signals": [
+        {
+          "type": "contact_establishment",
+          "value": 2.5058,
+          "threshold": 1.0,
+          "status": "established"
+        }
+      ],
+      "transition_condition": {
+        "from_stage": "P3",
+        "to_next": "P4",
+        "condition_met": true,
+        "trigger": "contact_force > 1.0 (current: 2.51)"
       }
     },
     {
@@ -695,6 +1016,47 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
       "evidence": {
         "avg_grip_force": "1.49",
         "max_slip_score": "0.57"
+      },
+      "component_states": {
+        "gripper_distance": 0.0,
+        "contact_force": 2.453,
+        "grip_force": 2.9845,
+        "cup_height": 0.0,
+        "slip_score": 0.5687,
+        "cup_tilt": 0.0
+      },
+      "physical_relations": [
+        {
+          "type": "contact",
+          "state": "established"
+        },
+        {
+          "type": "support",
+          "state": "degraded",
+          "health_metrics": {
+            "stability_score": 0.4313,
+            "load_capacity": 0.5
+          }
+        }
+      ],
+      "risk_signals": [
+        {
+          "type": "slip_risk",
+          "value": 0.5687,
+          "threshold": 0.3,
+          "severity": "medium"
+        },
+        {
+          "type": "force_stability",
+          "value": "stable",
+          "metric": 2.9845
+        }
+      ],
+      "transition_condition": {
+        "from_stage": "P4",
+        "to_next": "P5",
+        "condition_met": true,
+        "trigger": "grip_force applied, slip_score 0.57"
       }
     },
     {
@@ -706,6 +1068,54 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
         "max_slip_score": "0.90",
         "max_cup_tilt": "15.1deg",
         "final_cup_height": "0.007m"
+      },
+      "component_states": {
+        "gripper_distance": 0.0,
+        "contact_force": 0.2904,
+        "grip_force": 2.9156,
+        "cup_height": 0.00706,
+        "slip_score": 0.8848,
+        "cup_tilt": 15.079
+      },
+      "physical_relations": [
+        {
+          "type": "contact",
+          "state": "established"
+        },
+        {
+          "type": "support",
+          "state": "broken",
+          "health_metrics": {
+            "stability_score": 0.11519999999999997,
+            "load_capacity": 0.8
+          }
+        }
+      ],
+      "risk_signals": [
+        {
+          "type": "slip_risk",
+          "value": 0.8848,
+          "threshold": 0.7,
+          "severity": "critical"
+        },
+        {
+          "type": "tilt_risk",
+          "value": 15.079,
+          "threshold": 12.0,
+          "severity": "critical"
+        },
+        {
+          "type": "height_progress",
+          "value": 0.00706,
+          "target": 0.15,
+          "status": "insufficient"
+        }
+      ],
+      "transition_condition": {
+        "from_stage": "P5",
+        "to_next": "P6",
+        "condition_met": false,
+        "trigger": "cup_height > 0.1 (current: 0.007)"
       }
     }
   ],
@@ -750,7 +1160,20 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
     {
       "patch_id": "F1",
       "failure_type": "slip",
-      "root_cause": "grip_force_insufficient_under_low_friction",
+      "failure_hypothesis": {
+        "primary": "insufficient_normal_force_under_low_friction",
+        "confidence": "medium",
+        "evidence": [
+          "elevating_slip_score",
+          "increasing_tilt",
+          "low_friction_condition"
+        ],
+        "alternative_hypotheses": [
+          "acceleration_too_high",
+          "contact_position_unstable",
+          "object_surface_properties_changed"
+        ]
+      },
       "relation_delta": {
         "support": [
           "attempted",
@@ -758,6 +1181,29 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
           "broken"
         ]
       },
+      "validation_required": true,
+      "validation_metrics": [
+        {
+          "name": "slip_score_peak",
+          "target": "< 0.3",
+          "current": 0.8977
+        },
+        {
+          "name": "tilt_deg_peak",
+          "target": "< 8",
+          "current": 15.079
+        },
+        {
+          "name": "final_cup_height",
+          "target": "> 0.15m",
+          "current": "0.007m"
+        },
+        {
+          "name": "grip_force_stability",
+          "target": "variance < 0.5",
+          "current": "unknown"
+        }
+      ],
       "validation_status": "pending",
       "patch": {
         "adjust_force": "increase_grip_force",
@@ -782,6 +1228,38 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
     "updated": false,
     "pending_update": "patch_generated_but_not_validated",
     "notes": []
+  },
+  "next_action_recommendation": {
+    "current_interaction_state": "lift_failure",
+    "risk_level": "orange",
+    "candidate_failure_hypotheses": [
+      "insufficient_normal_force_under_low_friction",
+      "insufficient_normal_force",
+      "lift_acceleration_too_high",
+      "support_degradation_during_motion"
+    ],
+    "next_action_recommendation": {
+      "type": "validation_patch",
+      "action": {
+        "force_adjustment": "increase_grip_force",
+        "contact_adjustment": "shift_contact_position",
+        "restart_from_phase": "P3"
+      },
+      "reason": "low-risk patch; helps distinguish between force and acceleration induced failures",
+      "requires_validation": true,
+      "validation_metrics": [
+        "slip_score_peak",
+        "tilt_deg_peak",
+        "final_cup_height",
+        "grip_force_stability"
+      ],
+      "validation_criteria": {
+        "slip_score_peak": "< 0.3",
+        "tilt_deg_peak": "< 8",
+        "final_cup_height": "> 0.15",
+        "grip_force_stability": "variance < 0.5"
+      }
+    }
   },
   "representation_gain": {
     "raw_observables": [
@@ -836,6 +1314,22 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
       "risk": "GREEN",
       "evidence": {
         "gripper_distance": "decreasing"
+      },
+      "component_states": {
+        "gripper_distance": 0.0476,
+        "contact_force": 0.0,
+        "grip_force": 0.0,
+        "cup_height": 0.0,
+        "slip_score": 0.0,
+        "cup_tilt": 0.0
+      },
+      "physical_relations": [],
+      "risk_signals": [],
+      "transition_condition": {
+        "from_stage": "P1",
+        "to_next": "P2",
+        "condition_met": true,
+        "trigger": "gripper_distance < 0.05 (current: 0.048)"
       }
     },
     {
@@ -845,6 +1339,22 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
       "risk": "GREEN",
       "evidence": {
         "gripper_distance": "stabilized"
+      },
+      "component_states": {
+        "gripper_distance": 0.01584,
+        "contact_force": 0.0,
+        "grip_force": 0.0,
+        "cup_height": 0.0,
+        "slip_score": 0.0,
+        "cup_tilt": 0.0
+      },
+      "physical_relations": [],
+      "risk_signals": [],
+      "transition_condition": {
+        "from_stage": "P2",
+        "to_next": "P3",
+        "condition_met": true,
+        "trigger": "gripper_distance stable (current: 0.016)"
       }
     },
     {
@@ -854,6 +1364,34 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
       "risk": "GREEN",
       "evidence": {
         "contact_force": "increased"
+      },
+      "component_states": {
+        "gripper_distance": -0.00122,
+        "contact_force": 2.7395,
+        "grip_force": 0.0,
+        "cup_height": 0.0,
+        "slip_score": 0.0,
+        "cup_tilt": 0.0
+      },
+      "physical_relations": [
+        {
+          "type": "contact",
+          "state": "established"
+        }
+      ],
+      "risk_signals": [
+        {
+          "type": "contact_establishment",
+          "value": 2.7395,
+          "threshold": 1.0,
+          "status": "established"
+        }
+      ],
+      "transition_condition": {
+        "from_stage": "P3",
+        "to_next": "P4",
+        "condition_met": true,
+        "trigger": "contact_force > 1.0 (current: 2.74)"
       }
     },
     {
@@ -864,6 +1402,47 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
       "evidence": {
         "avg_grip_force": "3.24",
         "max_slip_score": "0.03"
+      },
+      "component_states": {
+        "gripper_distance": 0.0,
+        "contact_force": 2.7928,
+        "grip_force": 6.4762,
+        "cup_height": 0.0,
+        "slip_score": 0.0287,
+        "cup_tilt": 0.0
+      },
+      "physical_relations": [
+        {
+          "type": "contact",
+          "state": "established"
+        },
+        {
+          "type": "support",
+          "state": "established",
+          "health_metrics": {
+            "stability_score": 0.9713,
+            "load_capacity": 0.8
+          }
+        }
+      ],
+      "risk_signals": [
+        {
+          "type": "slip_risk",
+          "value": 0.0287,
+          "threshold": 0.3,
+          "severity": "medium"
+        },
+        {
+          "type": "force_stability",
+          "value": "stable",
+          "metric": 6.4762
+        }
+      ],
+      "transition_condition": {
+        "from_stage": "P4",
+        "to_next": "P5",
+        "condition_met": true,
+        "trigger": "grip_force applied, slip_score 0.03"
       }
     },
     {
@@ -875,6 +1454,54 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
         "max_slip_score": "0.06",
         "max_cup_tilt": "4.1deg",
         "final_cup_height": "0.221m"
+      },
+      "component_states": {
+        "gripper_distance": 0.0,
+        "contact_force": 2.9677,
+        "grip_force": 6.5217,
+        "cup_height": 0.22148,
+        "slip_score": 0.0529,
+        "cup_tilt": 4.117
+      },
+      "physical_relations": [
+        {
+          "type": "contact",
+          "state": "established"
+        },
+        {
+          "type": "support",
+          "state": "established",
+          "health_metrics": {
+            "stability_score": 0.9471,
+            "load_capacity": 0.8
+          }
+        }
+      ],
+      "risk_signals": [
+        {
+          "type": "slip_risk",
+          "value": 0.0529,
+          "threshold": 0.7,
+          "severity": "high"
+        },
+        {
+          "type": "tilt_risk",
+          "value": 4.117,
+          "threshold": 12.0,
+          "severity": "medium"
+        },
+        {
+          "type": "height_progress",
+          "value": 0.22148,
+          "target": 0.15,
+          "status": "insufficient"
+        }
+      ],
+      "transition_condition": {
+        "from_stage": "P5",
+        "to_next": "P6",
+        "condition_met": true,
+        "trigger": "cup_height > 0.1 (current: 0.221)"
       }
     }
   ],
@@ -934,6 +1561,14 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
     "notes": [
       "Patch F1 validation passed: increase_grip_force + shift_contact_position. Grasp succeeded with slip_score < 0.3, cup_tilt < 8deg."
     ]
+  },
+  "next_action_recommendation": {
+    "current_interaction_state": "lift_stable",
+    "risk_level": "green",
+    "recommendation_type": "continue_execution",
+    "action": "continue_to_next_stage",
+    "reason": "all constraints satisfied, risks within acceptable range",
+    "requires_validation": false
   },
   "representation_gain": {
     "raw_observables": [

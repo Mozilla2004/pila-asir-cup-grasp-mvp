@@ -180,6 +180,24 @@ def extract_asir_trace(traj: dict) -> dict:
                 }
             })
 
+        # Extract stage-specific risk signals (v0.5)
+        risk_signals = []
+        if phase_name == "grasp":
+            risk_signals = [
+                {"type": "slip_risk", "value": component_states["slip_score"], "threshold": 0.3, "severity": "high" if component_states["slip_score"] > 0.6 else "medium"},
+                {"type": "force_stability", "value": "stable" if component_states["grip_force"] > 2.0 else "unstable", "metric": component_states["grip_force"]}
+            ]
+        elif phase_name == "lift":
+            risk_signals = [
+                {"type": "slip_risk", "value": component_states["slip_score"], "threshold": 0.7, "severity": "critical" if component_states["slip_score"] > 0.7 else "high"},
+                {"type": "tilt_risk", "value": component_states["cup_tilt"], "threshold": 12.0, "severity": "critical" if component_states["cup_tilt"] > 12 else "medium"},
+                {"type": "height_progress", "value": component_states["cup_height"], "target": 0.15, "status": "insufficient"}
+            ]
+        elif phase_name == "contact":
+            risk_signals = [
+                {"type": "contact_establishment", "value": component_states["contact_force"], "threshold": 1.0, "status": "established" if component_states["contact_force"] > 1.0 else "pending"}
+            ]
+
         # Stage transition conditions (v0.5)
         transition_condition = {
             "from_stage": pid,
@@ -197,6 +215,7 @@ def extract_asir_trace(traj: dict) -> dict:
             # v0.5: Enhanced stage-by-stage information
             "component_states": component_states,
             "physical_relations": stage_physical_relations,
+            "risk_signals": risk_signals,
             "transition_condition": transition_condition,
         })
 
@@ -261,6 +280,13 @@ def extract_asir_trace(traj: dict) -> dict:
             "relation_delta": {
                 "support": ["attempted", "degraded", "broken"],
             },
+            "validation_required": True,
+            "validation_metrics": [
+                {"name": "slip_score_peak", "target": "< 0.3", "current": max_slip},
+                {"name": "tilt_deg_peak", "target": "< 8", "current": max_tilt},
+                {"name": "final_cup_height", "target": "> 0.15m", "current": "0.007m"},
+                {"name": "grip_force_stability", "target": "variance < 0.5", "current": "unknown"}
+            ],
             "validation_status": "pending",
             "patch": {
                 "adjust_force": "increase_grip_force",

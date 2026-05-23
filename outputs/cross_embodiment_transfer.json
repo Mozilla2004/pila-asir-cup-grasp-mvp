@@ -2,7 +2,20 @@
   "asir_version": "0.3",
   "source_trace_task": "pick_up_cup",
   "source_failure_meaning": "support_degraded",
-  "source_root_cause": "grip_force_insufficient_under_low_friction",
+  "source_root_cause": {
+    "primary": "insufficient_normal_force_under_low_friction",
+    "confidence": "medium",
+    "evidence": [
+      "elevating_slip_score",
+      "increasing_tilt",
+      "low_friction_condition"
+    ],
+    "alternative_hypotheses": [
+      "acceleration_too_high",
+      "contact_position_unstable",
+      "object_surface_properties_changed"
+    ]
+  },
   "transfer_claim": "AS-IR transfers interaction meaning, not raw trajectory parameters.",
   "not_transferred": [
     "joint_trajectory",
@@ -20,7 +33,20 @@
       "morphology_type": "parallel_jaw",
       "contact_model": "rigid_two_point",
       "source_failure_meaning": "support_degraded",
-      "source_root_cause": "grip_force_insufficient_under_low_friction",
+      "source_root_cause": {
+        "primary": "insufficient_normal_force_under_low_friction",
+        "confidence": "medium",
+        "evidence": [
+          "elevating_slip_score",
+          "increasing_tilt",
+          "low_friction_condition"
+        ],
+        "alternative_hypotheses": [
+          "acceleration_too_high",
+          "contact_position_unstable",
+          "object_surface_properties_changed"
+        ]
+      },
       "meaning_interpretation": {
         "shared_meaning": "support relation degraded due to insufficient grip under low friction",
         "robot_specific_reading": "two-point contact cannot generate enough friction; increase normal force or shift contact to higher-friction surface region"
@@ -37,7 +63,20 @@
       "morphology_type": "adaptive_tripod",
       "contact_model": "soft_three_point",
       "source_failure_meaning": "support_degraded",
-      "source_root_cause": "grip_force_insufficient_under_low_friction",
+      "source_root_cause": {
+        "primary": "insufficient_normal_force_under_low_friction",
+        "confidence": "medium",
+        "evidence": [
+          "elevating_slip_score",
+          "increasing_tilt",
+          "low_friction_condition"
+        ],
+        "alternative_hypotheses": [
+          "acceleration_too_high",
+          "contact_position_unstable",
+          "object_surface_properties_changed"
+        ]
+      },
       "meaning_interpretation": {
         "shared_meaning": "support relation degraded due to insufficient grip under low friction",
         "robot_specific_reading": "two-contact grasp lacks form closure; activate third finger to create triangular support and redistribute contact forces"
@@ -55,7 +94,20 @@
       "morphology_type": "vacuum_cup",
       "contact_model": "surface_adhesion",
       "source_failure_meaning": "support_degraded",
-      "source_root_cause": "grip_force_insufficient_under_low_friction",
+      "source_root_cause": {
+        "primary": "insufficient_normal_force_under_low_friction",
+        "confidence": "medium",
+        "evidence": [
+          "elevating_slip_score",
+          "increasing_tilt",
+          "low_friction_condition"
+        ],
+        "alternative_hypotheses": [
+          "acceleration_too_high",
+          "contact_position_unstable",
+          "object_surface_properties_changed"
+        ]
+      },
       "meaning_interpretation": {
         "shared_meaning": "support relation degraded due to insufficient grip under low friction",
         "robot_specific_reading": "vacuum seal is marginal on this surface; increase suction pressure, verify seal integrity, and reduce acceleration to avoid peel-off"
