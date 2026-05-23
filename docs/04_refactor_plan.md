@@ -128,6 +128,11 @@ represented as a stage-by-stage physical interaction runtime trace...
 }
 ```
 
+**MVP 边界说明**：
+> This shows structured experience retention, not automatic model weight updates.
+>
+> 这展示了结构化经验保留，不代表自动模型权重更新。
+
 #### Embodiment Adapter Mapping
 ```json
 {
@@ -206,7 +211,8 @@ class NextActionRecommender:
 ```python
 class LearningUpdater:
     def update_from_validation(self, patch_result, validation_metrics):
-        # 真实的学习逻辑
+        # MVP边界说明：这里指结构化经验保留与数据/策略建议
+        #不代表已完成模型权重更新
         return {
             "new_failure_structure": ...,
             "patch_validation": ...,
@@ -215,6 +221,11 @@ class LearningUpdater:
             "next_sampling_policy": ...
         }
 ```
+
+**MVP 边界说明**：
+> In this MVP, `learning_update` means **structured experience retention and dataset/action-policy recommendation**, not automatic model weight update.
+>
+> 在本 MVP 中，`learning_update` 指**结构化经验保留与数据/策略建议**，不代表已完成模型权重更新。
 
 ---
 
@@ -309,11 +320,25 @@ or any other data format.
 
 ## 实施顺序
 
-1. ✅ **Week 1**: 完成 5 个文档（当前阶段）
-2. ⏳ **Week 2**: README 重定位 + 字段重命名
-3. ⏳ **Week 3**: 数据结构重构 + 新增模块
-4. ⏳ **Week 4**: HTML 报告重构 + 新增章节
-5. ⏳ **Week 5**: 边界说明 + 向后兼容处理
+### Phase A: 文档和审计
+1. ✅ 完成 5 个文档（当前阶段）
+2. ⏳ 文档修订和人工审计
+3. ⏳ 架构设计确认
+
+### Phase B: 最小代码重构
+4. ⏳ README 重定位 + 字段重命名
+5. ⏳ 核心数据结构重构
+6. ⏳ 新增基础模块 (next_action, learning_updater)
+
+### Phase C: 报告/UI 升级
+7. ⏳ HTML 报告重构 + 新增章节
+8. ⏳ Stage-by-Stage Trace 可视化
+9. ⏳ 边界说明完善
+
+### Phase D: 边界和向后兼容
+10. ⏳ 向后兼容处理 (v0.4 failure report slice)
+11. ⏳ MVP proves / does not prove 说明完善
+12. ⏳ 最终验证和文档更新
 
 ---
 

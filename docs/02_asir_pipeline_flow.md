@@ -163,7 +163,7 @@ graph TD
 
 ### Stage 5: Failure / Risk Escalation (失败/风险升级)
 
-**层级**: AS-IR Runtime → PILa Semantic
+**层级**: AS-IR Runtime Layer, guided by PILa semantics
 
 **关键要素**:
 - `risk_signals`: 多维度升级
@@ -176,7 +176,7 @@ graph TD
 
 ### Stage 6: Patch Suggestion (补丁建议)
 
-**层级**: PILa Semantic → AS-IR Runtime
+**层级**: AS-IR Runtime Layer, using PILa patch semantics
 
 **关键要素**:
 - `patch_suggestion.action`: 具体修复行动

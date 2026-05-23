@@ -39,17 +39,17 @@ AS-IR **是**：
 
 JSON 和 HTML 报告**只是输出载体**，不是 PILa / AS-IR 本身。
 
-**类比**：
-- PILa ≈ 编程语言 (如 Python)
-- AS-IR ≈ 编译后的字节码
-- JSON/HTML ≈ 执行结果输出
+**正确类比**：
+- PILa ≈ 编程语言语义层 (如 Python 的语言定义)
+- AS-IR ≈ 运行时中间表示 (如 Python 的 AST 或字节码)
+- JSON/HTML/ROS message/protobuf ≈ 序列化或展示格式
 
 ### 与其他组件的关系
 
 | 组件 | 解决的问题 | 与 AS-IR 的关系 |
 |------|------------|-----------------|
 | **VLA** (Vision-Language-Action models) | "怎么行动？" | AS-IR 让 VLA 的行动过程更可观测、可验证 |
-| **World Model** | "行动后会怎样？" | AS-IR 让 World Model 的预测更可审计、可修复 |
+| **World Model** | "行动后会怎样？" | AS-IR 让 World Model 的预测结果更容易被解释、验证，并转化为下一步行动依据。 |
 | **RL / Controller** | "如何执行控制？" | AS-IR 让控制过程更可解释、可迁移 |
 | **AS-IR** | "物理交互过程如何表达？" | 为上述组件提供运行时语义层 |
 

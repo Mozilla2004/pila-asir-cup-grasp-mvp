@@ -81,16 +81,16 @@ AS-IR Trace = [
 
 ## PILa → AS-IR 的映射关系
 
-### 类比：编程语言 vs 字节码
+### 正确类比：语义层 vs 运行时表示
 
 | 层级 | PILa | AS-IR |
 |------|------|-------|
-| **高级** | "我想要抓起杯子" | `{intent: "pick_up_cup", phases: [...]}` |
-| **中级** | "建立支撑关系" | `{relation: "support", state: "established"}` |
-| **低级** | "检测滑移风险" | `{risk: "slip", probability: 0.8}` |
-| **执行** | 机器人运行时轨迹 | 时间序列的状态机 |
+| **语义层** | "我想要抓起杯子" | `{intent: "pick_up_cup", phases: [...]}` |
+| **结构层** | "建立支撑关系" | `{relation: "support", state: "established"}` |
+| **状态层** | "检测滑移风险" | `{risk: "slip", probability: 0.8}` |
+| **执行层** | 机器人运行时轨迹 | 时间序列的状态机 |
 
-### 编译过程
+### 数据流
 
 ```
 PILa Semantic Definition
@@ -98,6 +98,11 @@ PILa Semantic Definition
 AS-IR Schema Initialization
     ↓ (runtime execution)
 Stage-by-Stage Interaction Trace
+    ↓ (embodiment adaptation)
+Robot-Specific Execution
+    ↓ (serialization choices)
+JSON / HTML / ROS message / protobuf
+```
     ↓ (embodiment adaptation)
 Robot-Specific Execution
     ↓ (feedback loop)
