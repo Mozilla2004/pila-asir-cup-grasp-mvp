@@ -67,7 +67,11 @@ AS-IR **不是** 失败报告生成器、日志记录系统、数据可视化工
 - **焦点**: Stage-by-Stage Physical Interaction Runtime Trace
 - **新增**: 实时语义追踪、基于假设的推理、Next Action Recommendation
 
-### v0.4 (Preserved)
+### Legacy Notes (v0.3 - v0.4)
+
+以下内容保留用于历史参考，但使用的是旧版术语（legacy terminology）：
+
+**v0.4 (Preserved - Legacy)**
 - **焦点**: Failure Diagnosis Report
 - **用途**: 事后分析和可视化
 
@@ -119,7 +123,7 @@ outputs/asir_mvp_report.html
 | `raw_trajectory_success.json` | Simulated trajectory — patched, successful grasp |
 | `asir_trace_failure.json` | AS-IR structured trace for the failure run |
 | `asir_trace_success.json` | AS-IR structured trace for the patched run |
-| `patch_report.md` | Markdown report of failure diagnosis and repair |
+| `patch_report.md` | Markdown report of failure hypotheses, patch suggestions, validation metrics, and learning update |
 | `cross_embodiment_transfer.json` | Cross-embodiment meaning transfer output |
 | `asir_mvp_report.html` | Full bilingual HTML report with plots, animations, and trace comparison |
 | `assets/trajectory_plot.png` | Trajectory comparison plot (embedded in HTML) |
@@ -127,9 +131,9 @@ outputs/asir_mvp_report.html
 ## What to Look For
 
 1. **Raw trajectory** shows low-level signals (forces, distances, scores).
-2. **AS-IR trace** explains phases, physical relations, and failure cause explicitly.
-3. **Failure patch** identifies the root cause and proposes a repair strategy.
-4. **Patched run** succeeds — demonstrating the patch is actionable.
+2. **AS-IR trace** represents phases, component states, physical relations, and risk signals explicitly.
+3. **Failure hypothesis** identifies evidence-backed candidate explanations and links them to patch suggestions with validation metrics.
+4. **Patched run** succeeds — demonstrating the patch suggestion is actionable.
 5. **Learning update** records what was learned in structured metadata.
 6. **Cross-embodiment transfer** shows the same failure meaning generates different patches for different robots.
 7. **Interactive animations** illustrate the interaction timeline, meaning extraction, and cross-embodiment flow with Replay buttons.
