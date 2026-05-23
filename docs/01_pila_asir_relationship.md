@@ -100,13 +100,10 @@ AS-IR Schema Initialization
 Stage-by-Stage Interaction Trace
     ↓ (embodiment adaptation)
 Robot-Specific Execution
-    ↓ (serialization choices)
-JSON / HTML / ROS message / protobuf
-```
-    ↓ (embodiment adaptation)
-Robot-Specific Execution
-    ↓ (feedback loop)
+    ↓ (physical feedback)
 AS-IR State Update
+    ↓ (serialization / visualization)
+JSON / HTML / ROS message / protobuf
 ```
 
 ---

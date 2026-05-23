@@ -41,7 +41,7 @@ JSON 和 HTML 报告**只是输出载体**，不是 PILa / AS-IR 本身。
 
 **正确类比**：
 - PILa ≈ 编程语言语义层 (如 Python 的语言定义)
-- AS-IR ≈ 运行时中间表示 (如 Python 的 AST 或字节码)
+- AS-IR ≈ 运行时中间表示 / 交互状态轨迹表示，可类比 AST、runtime trace 或中间表示 IR，但不是低层机器字节码
 - JSON/HTML/ROS message/protobuf ≈ 序列化或展示格式
 
 ### 与其他组件的关系
