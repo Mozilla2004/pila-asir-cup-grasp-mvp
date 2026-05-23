@@ -185,13 +185,13 @@ def extract_asir_trace(traj: dict) -> dict:
         if phase_name == "grasp":
             risk_signals = [
                 {"type": "slip_risk", "value": component_states["slip_score"], "threshold": 0.3, "severity": "high" if component_states["slip_score"] > 0.6 else "medium"},
-                {"type": "force_stability", "value": "stable" if component_states["grip_force"] > 2.0 else "unstable", "metric": component_states["grip_force"]}
+                {"type": "force_stability", "value": "stable" if component_states["grip_force"] > 2.0 else "unstable", "severity": "observed", "metric": component_states["grip_force"]}
             ]
         elif phase_name == "lift":
             risk_signals = [
                 {"type": "slip_risk", "value": component_states["slip_score"], "threshold": 0.7, "severity": "critical" if component_states["slip_score"] > 0.7 else "high"},
                 {"type": "tilt_risk", "value": component_states["cup_tilt"], "threshold": 12.0, "severity": "critical" if component_states["cup_tilt"] > 12 else "medium"},
-                {"type": "height_progress", "value": component_states["cup_height"], "target": 0.15, "status": "insufficient"}
+                {"type": "height_progress", "value": component_states["cup_height"], "target": 0.15, "status": "target_reached" if component_states["cup_height"] >= 0.15 else "insufficient"}
             ]
         elif phase_name == "contact":
             risk_signals = [
@@ -314,6 +314,110 @@ def extract_asir_trace(traj: dict) -> dict:
             "notes": [],
         }
 
+    # Add P6-P8 cognitive stages (v0.5.2 fix)
+    if not traj["success"]:
+        # Failure run: P6 → P7 (pending) → P8 (pending)
+        p6_patch_suggestion = {
+            "id": "P6",
+            "type": "patch_suggestion",
+            "status": "success",
+            "risk": "GREEN",
+            "evidence": {"patch_generated": True},
+            "component_states": {},
+            "physical_relations": [],
+            "risk_signals": [],
+            "transition_condition": {
+                "from_stage": "P6",
+                "to_next": "P7",
+                "condition_met": True,
+                "trigger": "patch_suggestion_generated"
+            }
+        }
+        p7_validation = {
+            "id": "P7",
+            "type": "validation",
+            "status": "pending",
+            "risk": "YELLOW",
+            "evidence": {"validation_status": "pending"},
+            "component_states": {},
+            "physical_relations": [],
+            "risk_signals": [],
+            "transition_condition": {
+                "from_stage": "P7",
+                "to_next": "P8",
+                "condition_met": False,
+                "trigger": "patch_not_yet_applied"
+            }
+        }
+        p8_learning = {
+            "id": "P8",
+            "type": "learning_update",
+            "status": "pending",
+            "risk": "YELLOW",
+            "evidence": {"learning_status": "pending"},
+            "component_states": {},
+            "physical_relations": [],
+            "risk_signals": [],
+            "transition_condition": {
+                "from_stage": "P8",
+                "to_next": "end",
+                "condition_met": False,
+                "trigger": "validation_required_before_learning"
+            }
+        }
+        phases.extend([p6_patch_suggestion, p7_validation, p8_learning])
+    else:
+        # Patched success run: P6 → P7 (validated) → P8 (completed)
+        p6_patch_suggestion = {
+            "id": "P6",
+            "type": "patch_suggestion",
+            "status": "success",
+            "risk": "GREEN",
+            "evidence": {"patch_applied": True},
+            "component_states": {},
+            "physical_relations": [],
+            "risk_signals": [],
+            "transition_condition": {
+                "from_stage": "P6",
+                "to_next": "P7",
+                "condition_met": True,
+                "trigger": "patch_applied"
+            }
+        }
+        p7_validation = {
+            "id": "P7",
+            "type": "validation",
+            "status": "success",
+            "risk": "GREEN",
+            "evidence": {"validation_status": "passed"},
+            "component_states": {},
+            "physical_relations": [],
+            "risk_signals": [],
+            "transition_condition": {
+                "from_stage": "P7",
+                "to_next": "P8",
+                "condition_met": True,
+                "trigger": "patch_validated"
+            }
+        }
+        p8_learning = {
+            "id": "P8",
+            "type": "learning_update",
+            "status": "success",
+            "risk": "GREEN",
+            "evidence": {"learning_status": "completed"},
+            "component_states": {},
+            "physical_relations": [],
+            "risk_signals": [],
+            "transition_condition": {
+                "from_stage": "P8",
+                "to_next": "end",
+                "condition_met": True,
+                "trigger": "learning_updated"
+            }
+        }
+        phases.extend([p6_patch_suggestion, p7_validation, p8_learning])
+
     # Representation gain
     is_success = traj["success"]
     representation_gain = {
@@ -322,7 +426,7 @@ def extract_asir_trace(traj: dict) -> dict:
             "cup_height", "cup_tilt", "slip_score",
         ],
         "asir_structures": [
-            "intent", "5 phases with status/risk",
+            "intent", "P0-P8 stages with status/risk",
             "3 physical relations", "2 physical invariants",
             "per-phase risk level",
         ],
@@ -335,7 +439,7 @@ def extract_asir_trace(traj: dict) -> dict:
     run_meta = traj.get("run_metadata", {})
 
     trace = {
-        "asir_version": "0.3",
+        "asir_version": "0.5",
         "task": "pick_up_cup",
         "run_metadata": {
             "run_id": run_meta.get("run_id", "unknown"),

@@ -1,6 +1,6 @@
-# AS-IR Failure Patch Report (v0.3)
+# AS-IR Failure Hypothesis and Patch Suggestion Report (v0.5)
 
-## Failure Diagnosis
+## Failure Hypothesis
 
 - **Patch ID**: F1
 - **Failure type**: slip
@@ -8,7 +8,7 @@
 - **Relation delta**: attempted -> degraded -> broken
 - **Validation status**: passed
 
-## Applied Patch
+## Patch Suggestion and Validation
 
 - **Force adjustment**: increase_grip_force
 - **Contact adjustment**: shift_contact_position
@@ -23,6 +23,9 @@
 | P3 (contact) | success | success |
 | P4 (grasp) | warning | success |
 | P5 (lift) | failure | success |
+| P6 (patch_suggestion) | success | success |
+| P7 (validation) | pending | success |
+| P8 (learning_update) | pending | success |
 
 ## Physical Invariants
 

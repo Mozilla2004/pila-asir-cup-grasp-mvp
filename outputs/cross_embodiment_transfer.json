@@ -1,8 +1,8 @@
 {
-  "asir_version": "0.3",
+  "asir_version": "0.5",
   "source_trace_task": "pick_up_cup",
   "source_failure_meaning": "support_degraded",
-  "source_root_cause": {
+  "source_failure_hypothesis": {
     "primary": "insufficient_normal_force_under_low_friction",
     "confidence": "medium",
     "evidence": [
@@ -33,7 +33,7 @@
       "morphology_type": "parallel_jaw",
       "contact_model": "rigid_two_point",
       "source_failure_meaning": "support_degraded",
-      "source_root_cause": {
+      "source_failure_hypothesis": {
         "primary": "insufficient_normal_force_under_low_friction",
         "confidence": "medium",
         "evidence": [
@@ -63,7 +63,7 @@
       "morphology_type": "adaptive_tripod",
       "contact_model": "soft_three_point",
       "source_failure_meaning": "support_degraded",
-      "source_root_cause": {
+      "source_failure_hypothesis": {
         "primary": "insufficient_normal_force_under_low_friction",
         "confidence": "medium",
         "evidence": [
@@ -94,7 +94,7 @@
       "morphology_type": "vacuum_cup",
       "contact_model": "surface_adhesion",
       "source_failure_meaning": "support_degraded",
-      "source_root_cause": {
+      "source_failure_hypothesis": {
         "primary": "insufficient_normal_force_under_low_friction",
         "confidence": "medium",
         "evidence": [

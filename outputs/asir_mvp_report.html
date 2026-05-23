@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PILa Cup-Grasp MVP v0.4.0</title>
+<title>PILa Cup-Grasp MVP v0.5.2</title>
 <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
            max-width: 940px; margin: 0 auto; padding: 60px 20px 40px; color: #333; line-height: 1.6; }
@@ -32,6 +32,9 @@
     .lang-toggle button { border: none; border-radius: 999px; padding: 7px 12px;
                             background: transparent; cursor: pointer; font-size: 0.9em; }
     .lang-toggle button.active { background: #111827; color: white; }
+    .stage-interpretation { background: #f8f9fa; border-left: 3px solid #339af0; padding: 10px; border-radius: 6px; margin-top: 12px; }
+    .stage-interpretation > div:first-child { font-weight: bold; color: #339af0; margin-bottom: 6px; font-size: 0.9em; }
+    .stage-interpretation > div:last-child { font-size: 0.85em; line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -41,7 +44,7 @@
   <button id="btn-zh" onclick="setLanguage('zh')">中文</button>
 </div>
 
-<h1><span data-en="PILa Cup-Grasp MVP v0.4.0" data-zh="PILa 物理交互语言杯子抓取最小样机 v0.4.0">PILa Cup-Grasp MVP v0.4.0</span></h1>
+<h1><span data-en="PILa Cup-Grasp MVP v0.5.2" data-zh="PILa 物理交互语言杯子抓取最小样机 v0.5.2">PILa Cup-Grasp MVP v0.5.2</span></h1>
 <p class="subtitle">
     <span data-en="From Raw Trajectory to Physical Interaction Language" data-zh="从原始轨迹到物理交互语言">From Raw Trajectory to Physical Interaction Language</span><br>
     <em><span data-en='Validating whether PILa can turn "what the robot did" into "what happened in the physical interaction."' data-zh='验证 PILa 是否能把"机器人做了什么"升级为"物理交互中发生了什么"。'>Validating whether PILa can turn "what the robot did" into "what happened in the physical interaction."</span></em>
@@ -70,13 +73,13 @@ They tell us <strong>what changed</strong>, but not <strong>why the interaction 
     <li><span data-en="Which phase broke down?" data-zh="哪个阶段出现了问题？">Which phase broke down?</span></li>
     <li><span data-en="What physical relation degraded?" data-zh="哪个物理关系退化了？">What physical relation degraded?</span></li>
     <li><span data-en="What invariant was violated?" data-zh="哪个不变量被违反了？">What invariant was violated?</span></li>
-    <li><span data-en="How should the robot repair and retry?" data-zh="机器人应该如何修复并重试？">How should the robot repair and retry?</span></li>
+    <li><span data-en="What patch should be suggested and validated next?" data-zh="应该建议和验证什么补丁？">What patch should be suggested and validated next?</span></li>
 </ul>
 <p>
-<span data-en="PILa is a Physical Interaction Language for embodied intelligence. It describes what happens in physical interaction, not merely what the robot did. AS-IR is the intermediate representation layer underneath PILa — it structures intent, phases, physical relations, failure patches, transferability, runtime risks and engineering adapters." data-zh="PILa 是一种面向具身智能的物理交互语言。它描述的是物理交互中发生了什么，而不只是机器人做了什么。AS-IR 是 PILa 底层的中间表示层——它结构化描述意图、阶段、物理关系、失败补丁、迁移边界、运行风险和工程适配。"><strong>PILa</strong> is a Physical Interaction Language for embodied intelligence.
+<span data-en="PILa is a Physical Interaction Language for embodied intelligence. It describes what happens in physical interaction, not merely what the robot did. AS-IR is the intermediate representation layer underneath PILa — it structures intent, phases, physical relations, failure hypotheses, patch suggestions, transferability, runtime risks and engineering adapters." data-zh="PILa 是一种面向具身智能的物理交互语言。它描述的是物理交互中发生了什么，而不只是机器人做了什么。AS-IR 是 PILa 底层的中间表示层——它结构化描述意图、阶段、物理关系、失败假设、补丁建议、迁移边界、运行风险和工程适配。"><strong>PILa</strong> is a Physical Interaction Language for embodied intelligence.
 It describes <strong>what happens in physical interaction</strong>, not merely what the robot did.
 <strong>AS-IR</strong> is the intermediate representation layer underneath PILa &mdash;
-it structures intent, phases, physical relations, failure patches, transferability,
+it structures intent, phases, physical relations, failure hypotheses, patch suggestions, transferability,
 runtime risks and engineering adapters.</span>
 </p>
 </div>
@@ -86,7 +89,7 @@ runtime risks and engineering adapters.</span>
 <p><span data-en="Raw trajectory is signal-level. PILa uses AS-IR to provide structure-level." data-zh="原始轨迹是信号层，PILa 通过 AS-IR 提供结构层。">Raw trajectory is signal-level. PILa uses AS-IR to provide structure-level.</span></p>
 <table>
     <thead><tr><th><span data-en="Question" data-zh="视角">Question</span></th><th><span data-en="Raw Trajectory" data-zh="原始轨迹">Raw Trajectory</span></th><th><span data-en="AS-IR" data-zh="AS-IR">AS-IR</span></th></tr></thead>
-    <tbody><tr><td><strong><span data-en="What is recorded?" data-zh="记录了什么？">What is recorded?</span></strong></td><td><span data-en="Joint angles, force values, distances" data-zh="关节角度、力值、距离">Joint angles, force values, distances</span></td><td><span data-en="Intent, phases, relations, invariants" data-zh="意图、阶段、关系、不变量">Intent, phases, relations, invariants</span></td></tr><tr><td><strong><span data-en="Can identify phase?" data-zh="能否识别阶段？">Can identify phase?</span></strong></td><td><span data-en="No — must be inferred from signal changes" data-zh="不能——需要从信号变化中推断">No — must be inferred from signal changes</span></td><td><span data-en="Yes — explicit phase labels with status" data-zh="能——显式阶段标签与状态">Yes — explicit phase labels with status</span></td></tr><tr><td><strong><span data-en="Can diagnose failure?" data-zh="能否诊断失败？">Can diagnose failure?</span></strong></td><td><span data-en="Partially — high slip_score visible" data-zh="部分——能看到高滑移分数">Partially — high slip_score visible</span></td><td><span data-en="Yes — root cause, relation delta, violated invariant" data-zh="能——根因、关系退化、违反的不变量">Yes — root cause, relation delta, violated invariant</span></td></tr><tr><td><strong><span data-en="Can generate repair?" data-zh="能否生成修复？">Can generate repair?</span></strong></td><td><span data-en="No — only data, no structure" data-zh="不能——只有数据没有结构">No — only data, no structure</span></td><td><span data-en="Yes — actionable patch with restart point" data-zh="能——可操作补丁与重启点">Yes — actionable patch with restart point</span></td></tr><tr><td><strong><span data-en="Can track learning?" data-zh="能否追踪学习？">Can track learning?</span></strong></td><td><span data-en="No — each run is isolated" data-zh="不能——每次执行是孤立的">No — each run is isolated</span></td><td><span data-en="Yes — learning_update records validated patches" data-zh="能——learning_update 记录已验证补丁">Yes — learning_update records validated patches</span></td></tr><tr><td><strong><span data-en="Per-phase risk?" data-zh="逐阶段风险？">Per-phase risk?</span></strong></td><td><span data-en="No — single global view" data-zh="不能——只有全局视角">No — single global view</span></td><td><span data-en="Yes — GREEN / YELLOW / ORANGE per phase" data-zh="能——每阶段 GREEN / YELLOW / ORANGE">Yes — GREEN / YELLOW / ORANGE per phase</span></td></tr><tr><td><strong><span data-en="Transferable?" data-zh="可迁移？">Transferable?</span></strong></td><td><span data-en="No — raw values are embodiment-specific" data-zh="不能——原始值绑定具体本体">No — raw values are embodiment-specific</span></td><td><span data-en="Partially — domain-invariant vs domain-specific split" data-zh="部分——域不变与域特定分离">Partially — domain-invariant vs domain-specific split</span></td></tr></tbody>
+    <tbody><tr><td><strong><span data-en="What is recorded?" data-zh="记录了什么？">What is recorded?</span></strong></td><td><span data-en="Joint angles, force values, distances" data-zh="关节角度、力值、距离">Joint angles, force values, distances</span></td><td><span data-en="Intent, phases, relations, invariants" data-zh="意图、阶段、关系、不变量">Intent, phases, relations, invariants</span></td></tr><tr><td><strong><span data-en="Can identify phase?" data-zh="能否识别阶段？">Can identify phase?</span></strong></td><td><span data-en="No — must be inferred from signal changes" data-zh="不能——需要从信号变化中推断">No — must be inferred from signal changes</span></td><td><span data-en="Yes — explicit phase labels with status" data-zh="能——显式阶段标签与状态">Yes — explicit phase labels with status</span></td></tr><tr><td><strong><span data-en="Can diagnose failure?" data-zh="能否诊断失败？">Can diagnose failure?</span></strong></td><td><span data-en="Partially — high slip_score visible" data-zh="部分——能看到高滑移分数">Partially — high slip_score visible</span></td><td><span data-en="Yes — failure hypothesis, relation delta, violated invariant" data-zh="能——失败假设、关系退化、违反的不变量">Yes — failure hypothesis, relation delta, violated invariant</span></td></tr><tr><td><strong><span data-en="Can generate patch suggestion?" data-zh="能否生成补丁建议？">Can generate patch suggestion?</span></strong></td><td><span data-en="No — only data, no structure" data-zh="不能——只有数据没有结构">No — only data, no structure</span></td><td><span data-en="Yes — actionable patch with restart point" data-zh="能——可操作补丁与重启点">Yes — actionable patch with restart point</span></td></tr><tr><td><strong><span data-en="Can track learning?" data-zh="能否追踪学习？">Can track learning?</span></strong></td><td><span data-en="No — each run is isolated" data-zh="不能——每次执行是孤立的">No — each run is isolated</span></td><td><span data-en="Yes — learning_update records validated patches" data-zh="能——learning_update 记录已验证补丁">Yes — learning_update records validated patches</span></td></tr><tr><td><strong><span data-en="Per-phase risk?" data-zh="逐阶段风险？">Per-phase risk?</span></strong></td><td><span data-en="No — single global view" data-zh="不能——只有全局视角">No — single global view</span></td><td><span data-en="Yes — GREEN / YELLOW / ORANGE per phase" data-zh="能——每阶段 GREEN / YELLOW / ORANGE">Yes — GREEN / YELLOW / ORANGE per phase</span></td></tr><tr><td><strong><span data-en="Transferable?" data-zh="可迁移？">Transferable?</span></strong></td><td><span data-en="No — raw values are embodiment-specific" data-zh="不能——原始值绑定具体本体">No — raw values are embodiment-specific</span></td><td><span data-en="Partially — domain-invariant vs domain-specific split" data-zh="部分——域不变与域特定分离">Partially — domain-invariant vs domain-specific split</span></td></tr></tbody>
 </table>
 
 <!-- Section 3: Raw Trajectory View -->
@@ -94,7 +97,7 @@ runtime risks and engineering adapters.</span>
 <img src="assets/trajectory_plot.png" alt="Trajectory comparison plot">
 <p class="note">
     <span data-en="This chart compares the failed run and the patched run of the cup-grasp task. In the failed run, the grip force remains too low, the slip score rises sharply, the cup tilt increases, the contact force drops, and the cup only lifts briefly before falling. In the patched run, the grip force is increased, the contact force remains stable, the slip score stays close to zero, and the cup height continues to rise. This indicates that the patch improves support stability during grasping and lifting." data-zh="这组图对比了抓杯任务的失败运行与补丁后运行。失败运行中，抓取力不足，滑移分数升高，杯子倾斜增大，接触力下降，杯子只短暂离开桌面后又掉落。补丁后运行中，抓取力提高，接触力保持稳定，滑移风险接近零，杯子高度持续上升，说明补丁增强了抓取过程中的支撑稳定性。">This chart compares the failed run and the patched run of the cup-grasp task. In the failed run, the grip force remains too low, the slip score rises sharply, the cup tilt increases, the contact force drops, and the cup only lifts briefly before falling. In the patched run, the grip force is increased, the contact force remains stable, the slip score stays close to zero, and the cup height continues to rise. This indicates that the patch improves support stability during grasping and lifting.</span>
-    <span data-en="However, raw trajectory data only shows which signals changed. It does not directly explain why the physical interaction failed. AS-IR / PILa adds this missing structural layer: during the grasp → lift phase, the support relation between the gripper and the cup degrades from stable support to unstable support and eventually breaks. The root cause is not a single abnormal signal, but the failure to maintain support stability under low-friction conditions." data-zh="但原始轨迹只能显示"哪些信号发生了变化"，不能直接表达"为什么交互失败"。AS-IR / PILa 要补上的正是这一层结构意义：在 grasp → lift 阶段，杯子与夹爪之间的 support relation 从稳定支撑退化为不稳定支撑，最终断裂。失败的本质不是某一个数值异常，而是低摩擦条件下支撑关系无法维持。">However, raw trajectory data only shows which signals changed. It does not directly explain why the physical interaction failed. AS-IR / PILa adds this missing structural layer: during the grasp → lift phase, the support relation between the gripper and the cup degrades from stable support to unstable support and eventually breaks. The root cause is not a single abnormal signal, but the failure to maintain support stability under low-friction conditions.</span>
+    <span data-en="However, raw trajectory data only shows which signals changed. It does not directly explain why the physical interaction failed. AS-IR / PILa adds this missing structural layer: during the grasp → lift phase, the support relation between the gripper and the cup degrades from stable support to unstable support and eventually breaks. The failure hypothesis is not a single abnormal signal, but the failure to maintain support stability under low-friction conditions." data-zh="但原始轨迹只能显示"哪些信号发生了变化"，不能直接表达"为什么交互失败"。AS-IR / PILa 要补上的正是这一层结构意义：在 grasp → lift 阶段，杯子与夹爪之间的 support relation 从稳定支撑退化为不稳定支撑，最终断裂。失败假设不是某一个数值异常，而是低摩擦条件下支撑关系无法维持。">However, raw trajectory data only shows which signals changed. It does not directly explain why the physical interaction failed. AS-IR / PILa adds this missing structural layer: during the grasp → lift phase, the support relation between the gripper and the cup degrades from stable support to unstable support and eventually breaks. The failure hypothesis is not a single abnormal signal, but the failure to maintain support stability under low-friction conditions.</span>
 </p>
 
 <style>
@@ -149,18 +152,13 @@ runtime risks and engineering adapters.</span>
 
     <div class="insight-card">
         <h4>
-            <span data-en="🔧 Failure Patch" data-zh="🔧 Failure Patch">🔧 Failure Patch</span>
+            <span data-en="🔧 Failure Hypothesis & Patch Suggestion" data-zh="🔧 失败假设与补丁建议">🔧 Failure Hypothesis & Patch Suggestion</span>
         </h4>
         <p>
-            <span data-en="Which part of the interaction structure should be repaired?" data-zh="应该修复哪一段结构？">Which part of the interaction structure should be repaired?</span>
+            <span data-en="Which part of the interaction structure should receive patch suggestions?" data-zh="应该为哪一段结构建议补丁？">Which part of the interaction structure should receive patch suggestions?</span>
         </p>
     </div>
 </div>
-
-<p class="note" style="margin-top: 1.5rem;">
-    <span data-en="This chart compares the failed run and the patched run of the cup-grasp task. In the failed run, the grip force remains too low, the slip score rises sharply, the cup tilt increases, the contact force drops, and the cup only lifts briefly before falling. In the patched run, the grip force is increased, the contact force remains stable, the slip score stays close to zero, and the cup height continues to rise. This indicates that the patch improves support stability during grasping and lifting." data-zh="这组图对比了抓杯任务的失败运行与补丁后运行。失败运行中，抓取力不足，滑移分数升高，杯子倾斜增大，接触力下降，杯子只短暂离开桌面后又掉落。补丁后运行中，抓取力提高，接触力保持稳定，滑移风险接近零，杯子高度持续上升，说明补丁增强了抓取过程中的支撑稳定性。">This chart compares the failed run and the patched run of the cup-grasp task. In the failed run, the grip force remains too low, the slip score rises sharply, the cup tilt increases, the contact force drops, and the cup only lifts briefly before falling. In the patched run, the grip force is increased, the contact force remains stable, the slip score stays close to zero, and the cup height continues to rise. This indicates that the patch improves support stability during grasping and lifting.</span>
-    <span data-en="However, raw trajectory data only shows which signals changed. It does not directly explain why the physical interaction failed. AS-IR / PILa adds this missing structural layer: during the grasp → lift phase, the support relation between the gripper and the cup degrades from stable support to unstable support and eventually breaks. The root cause is not a single abnormal signal, but the failure to maintain support stability under low-friction conditions." data-zh="但原始轨迹只能显示"哪些信号发生了变化"，不能直接表达"为什么交互失败"。AS-IR / PILa 要补上的正是这一层结构意义：在 grasp → lift 阶段，杯子与夹爪之间的 support relation 从稳定支撑退化为不稳定支撑，最终断裂。失败的本质不是某一个数值异常，而是低摩擦条件下支撑关系无法维持。">However, raw trajectory data only shows which signals changed. It does not directly explain why the physical interaction failed. AS-IR / PILa adds this missing structural layer: during the grasp → lift phase, the support relation between the gripper and the cup degrades from stable support to unstable support and eventually breaks. The root cause is not a single abnormal signal, but the failure to maintain support stability under low-friction conditions.</span>
-</p>
 
 <!-- Section 3.5: Physical Interaction Animation -->
 <h2>4. <span data-en="Physical Interaction Animation" data-zh="物理交互动画">Physical Interaction Animation</span></h2>
@@ -258,11 +256,11 @@ border-radius:8px;overflow:hidden;margin-top:8px;border:1px solid #dee2e6;">
 <!-- Section 4: AS-IR Interaction Flow -->
 <h2>5. <span data-en="PILa / AS-IR Interaction Flow" data-zh="PILa / AS-IR 交互流">PILa / AS-IR Interaction Flow</span></h2>
 <p><span data-en="The full lifecycle: intent → phases → failure detection → patch → patched success." data-zh="完整生命周期：意图 → 阶段 → 失败检测 → 补丁 → 补丁后成功。">The full lifecycle: intent &rarr; phases &rarr; failure detection &rarr; patch &rarr; patched success.</span></p>
-<div style="padding:20px;background:#f8f9fa;border-radius:8px;border:1px solid #dee2e6;line-height:2.5;"><span style="background:#e7f5ff;padding:4px 10px;border-radius:4px;font-weight:bold;">Intent</span> &rarr; <span style="border:2px solid #27ae60;padding:4px 10px;border-radius:4px;">P1 approach <span style="color:#27ae60;font-weight:bold;">success</span> <span style="background:#d4edda;color:#27ae60;padding:1px 5px;border-radius:2px;font-size:0.75em;">GREEN</span></span> &rarr; <span style="border:2px solid #27ae60;padding:4px 10px;border-radius:4px;">P2 align <span style="color:#27ae60;font-weight:bold;">success</span> <span style="background:#d4edda;color:#27ae60;padding:1px 5px;border-radius:2px;font-size:0.75em;">GREEN</span></span> &rarr; <span style="border:2px solid #27ae60;padding:4px 10px;border-radius:4px;">P3 contact <span style="color:#27ae60;font-weight:bold;">success</span> <span style="background:#d4edda;color:#27ae60;padding:1px 5px;border-radius:2px;font-size:0.75em;">GREEN</span></span> &rarr; <span style="border:2px solid #f39c12;padding:4px 10px;border-radius:4px;">P4 grasp <span style="color:#f39c12;font-weight:bold;">warning</span> <span style="background:#fff3cd;color:#f39c12;padding:1px 5px;border-radius:2px;font-size:0.75em;">YELLOW</span></span> &rarr; <span style="border:2px solid #e74c3c;padding:4px 10px;border-radius:4px;">P5 lift <span style="color:#e74c3c;font-weight:bold;">failure</span> <span style="background:#f8d7da;color:#e74c3c;padding:1px 5px;border-radius:2px;font-size:0.75em;">ORANGE</span></span> &rarr; <span style="background:#fff3cd;border:2px solid #ffc107;padding:4px 10px;border-radius:4px;font-weight:bold;">Patch F1</span> &rarr; <span style="background:#d4edda;border:2px solid #27ae60;padding:4px 10px;border-radius:4px;font-weight:bold;">Patched Success</span></div>
+<div style="padding:20px;background:#f8f9fa;border-radius:8px;border:1px solid #dee2e6;line-height:2.5;"><span style="background:#e7f5ff;padding:4px 10px;border-radius:4px;font-weight:bold;">Intent</span> &rarr; <span style="border:2px solid #27ae60;padding:4px 10px;border-radius:4px;">P1 approach <span style="color:#27ae60;font-weight:bold;">success</span> <span style="background:#d4edda;color:#27ae60;padding:1px 5px;border-radius:2px;font-size:0.75em;">GREEN</span></span> &rarr; <span style="border:2px solid #27ae60;padding:4px 10px;border-radius:4px;">P2 align <span style="color:#27ae60;font-weight:bold;">success</span> <span style="background:#d4edda;color:#27ae60;padding:1px 5px;border-radius:2px;font-size:0.75em;">GREEN</span></span> &rarr; <span style="border:2px solid #27ae60;padding:4px 10px;border-radius:4px;">P3 contact <span style="color:#27ae60;font-weight:bold;">success</span> <span style="background:#d4edda;color:#27ae60;padding:1px 5px;border-radius:2px;font-size:0.75em;">GREEN</span></span> &rarr; <span style="border:2px solid #f39c12;padding:4px 10px;border-radius:4px;">P4 grasp <span style="color:#f39c12;font-weight:bold;">warning</span> <span style="background:#fff3cd;color:#f39c12;padding:1px 5px;border-radius:2px;font-size:0.75em;">YELLOW</span></span> &rarr; <span style="border:2px solid #e74c3c;padding:4px 10px;border-radius:4px;">P5 lift <span style="color:#e74c3c;font-weight:bold;">failure</span> <span style="background:#f8d7da;color:#e74c3c;padding:1px 5px;border-radius:2px;font-size:0.75em;">ORANGE</span></span> &rarr; <span style="border:2px solid #27ae60;padding:4px 10px;border-radius:4px;">P6 patch_suggestion <span style="color:#27ae60;font-weight:bold;">success</span> <span style="background:#d4edda;color:#27ae60;padding:1px 5px;border-radius:2px;font-size:0.75em;">GREEN</span></span> &rarr; <span style="border:2px solid #95a5a6;padding:4px 10px;border-radius:4px;">P7 validation <span style="color:#95a5a6;font-weight:bold;">pending</span> <span style="background:#fff3cd;color:#f39c12;padding:1px 5px;border-radius:2px;font-size:0.75em;">YELLOW</span></span> &rarr; <span style="border:2px solid #95a5a6;padding:4px 10px;border-radius:4px;">P8 learning_update <span style="color:#95a5a6;font-weight:bold;">pending</span> <span style="background:#fff3cd;color:#f39c12;padding:1px 5px;border-radius:2px;font-size:0.75em;">YELLOW</span></span> &rarr; <span style="background:#fff3cd;border:2px solid #ffc107;padding:4px 10px;border-radius:4px;font-weight:bold;">Patch F1</span> &rarr; <span style="background:#d4edda;border:2px solid #27ae60;padding:4px 10px;border-radius:4px;font-weight:bold;">Patched Success</span></div>
 
 <!-- Section 5: AS-IR Structure View (Failure) -->
 <h2>6. <span data-en="PILa / AS-IR Structure View (Failure Run)" data-zh="PILa / AS-IR 结构视角（失败执行）">PILa / AS-IR Structure View (Failure Run)</span></h2>
-<p><span data-en="PILa uses AS-IR to reveal phases, physical relations, runtime risks, failure patches and transfer boundaries." data-zh="PILa 通过 AS-IR 显影出阶段、物理关系、运行风险、失败补丁和迁移边界。">PILa uses AS-IR to reveal phases, physical relations, runtime risks, failure patches and transfer boundaries.</span></p>
+<p><span data-en="PILa uses AS-IR to reveal phases, physical relations, runtime risks, failure hypotheses, patch suggestions and transfer boundaries." data-zh="PILa 通过 AS-IR 显影出阶段、物理关系、运行风险、失败假设、补丁建议和迁移边界。">PILa uses AS-IR to reveal phases, physical relations, runtime risks, failure hypotheses, patch suggestions and transfer boundaries.</span></p>
 
 <h3><span data-en="Intent" data-zh="意图">Intent</span></h3>
 <div class="card">
@@ -278,7 +276,7 @@ border-radius:8px;overflow:hidden;margin-top:8px;border:1px solid #dee2e6;">
 
 <h3><span data-en="Phases (with per-phase risk)" data-zh="阶段（含逐阶段风险）">Phases (with per-phase risk)</span></h3>
 <div class="card">
-    <div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P1</strong> &mdash; approach <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>gripper_distance: <code>decreasing</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P2</strong> &mdash; align <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>gripper_distance: <code>stabilized</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P3</strong> &mdash; contact <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>contact_force: <code>increased</code></li></ul></div><div style="border-left:4px solid #f39c12;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P4</strong> &mdash; grasp <span style="color:#f39c12;font-weight:bold;">[WARNING]</span> <span style="background:#fff3cd;color:#f39c12;padding:2px 8px;border-radius:3px;font-size:0.8em;">YELLOW</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>avg_grip_force: <code>1.49</code></li><li>max_slip_score: <code>0.57</code></li></ul></div><div style="border-left:4px solid #e74c3c;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P5</strong> &mdash; lift <span style="color:#e74c3c;font-weight:bold;">[FAILURE]</span> <span style="background:#f8d7da;color:#e74c3c;padding:2px 8px;border-radius:3px;font-size:0.8em;">ORANGE</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>max_slip_score: <code>0.90</code></li><li>max_cup_tilt: <code>15.1deg</code></li><li>final_cup_height: <code>0.007m</code></li></ul></div>
+    <div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P1</strong> &mdash; approach <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>gripper_distance: <code>decreasing</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P2</strong> &mdash; align <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>gripper_distance: <code>stabilized</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P3</strong> &mdash; contact <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>contact_force: <code>increased</code></li></ul></div><div style="border-left:4px solid #f39c12;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P4</strong> &mdash; grasp <span style="color:#f39c12;font-weight:bold;">[WARNING]</span> <span style="background:#fff3cd;color:#f39c12;padding:2px 8px;border-radius:3px;font-size:0.8em;">YELLOW</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>avg_grip_force: <code>1.49</code></li><li>max_slip_score: <code>0.57</code></li></ul></div><div style="border-left:4px solid #e74c3c;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P5</strong> &mdash; lift <span style="color:#e74c3c;font-weight:bold;">[FAILURE]</span> <span style="background:#f8d7da;color:#e74c3c;padding:2px 8px;border-radius:3px;font-size:0.8em;">ORANGE</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>max_slip_score: <code>0.90</code></li><li>max_cup_tilt: <code>15.1deg</code></li><li>final_cup_height: <code>0.007m</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P6</strong> &mdash; patch_suggestion <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>patch_generated: <code>True</code></li></ul></div><div style="border-left:4px solid #95a5a6;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P7</strong> &mdash; validation <span style="color:#95a5a6;font-weight:bold;">[PENDING]</span> <span style="background:#fff3cd;color:#f39c12;padding:2px 8px;border-radius:3px;font-size:0.8em;">YELLOW</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>validation_status: <code>pending</code></li></ul></div><div style="border-left:4px solid #95a5a6;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P8</strong> &mdash; learning_update <span style="color:#95a5a6;font-weight:bold;">[PENDING]</span> <span style="background:#fff3cd;color:#f39c12;padding:2px 8px;border-radius:3px;font-size:0.8em;">YELLOW</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>learning_status: <code>pending</code></li></ul></div>
 </div>
 
 <h3><span data-en="Physical Relations" data-zh="物理关系">Physical Relations</span></h3>
@@ -299,15 +297,15 @@ border-radius:8px;overflow:hidden;margin-top:8px;border:1px solid #dee2e6;">
     <strong><span data-en="Reason:" data-zh="原因：">Reason:</span></strong> phase-level failure detected</p>
 </div>
 
-<h3><span data-en="Failure Patch" data-zh="失败补丁">Failure Patch</span></h3>
+<h3><span data-en="Failure Hypothesis &amp; Patch Suggestion" data-zh="失败假设与补丁建议">Failure Hypothesis &amp; Patch Suggestion</span></h3>
 
         <div style="background:#fff3cd;padding:16px;border-radius:8px;border:1px solid #ffc107;">
-            <h3 style="margin-top:0;"><span data-en="Failure Patch" data-zh="失败补丁">Failure Patch</span> <code>F1</code></h3>
+            <h3 style="margin-top:0;"><span data-en="Failure Hypothesis &amp; Patch Suggestion" data-zh="失败假设与补丁建议">Failure Hypothesis &amp; Patch Suggestion</span> <code>F1</code></h3>
             <p><strong><span data-en="Type:" data-zh="类型：">Type:</span></strong> slip<br>
             <strong><span data-en="Failure hypothesis:" data-zh="失败假设：">Failure hypothesis:</span></strong> <strong>insufficient_normal_force_under_low_friction</strong> (confidence: medium) <br><small>Evidence: elevating_slip_score, increasing_tilt +1 more</small><br>
             <strong><span data-en="Relation delta:" data-zh="关系退化：">Relation delta:</span></strong> support: attempted &rarr; degraded &rarr; broken<br>
             <strong><span data-en="Validation:" data-zh="验证：">Validation:</span></strong> <code>passed</code></p>
-            <p><strong><span data-en="Repair actions:" data-zh="修复动作：">Repair actions:</span></strong></p>
+            <p><strong><span data-en="Patch suggestion actions:" data-zh="补丁建议动作：">Patch suggestion actions:</span></strong></p>
             <ul>
                 <li><span data-en="Force:" data-zh="力：">Force:</span> <code>increase_grip_force</code></li>
                 <li><span data-en="Contact:" data-zh="接触：">Contact:</span> <code>shift_contact_position</code></li>
@@ -353,7 +351,7 @@ flex-wrap:wrap;">
     <div class="anim-asir-item" style="padding:6px 10px;margin:3px 0;background:#f1f3f5;
     border-left:3px solid transparent;border-radius:4px;font-size:0.85em;
     opacity:0.3;transition:all 0.5s;">
-      <strong><span data-en="5 Phases" data-zh="5 个阶段">5 Phases</span></strong> &mdash; <span data-en="status + risk per phase" data-zh="每阶段状态 + 风险">status + risk per phase</span></div>
+      <strong><span data-en="P0–P8 Stages" data-zh="P0–P8 阶段">P0–P8 Stages</span></strong> &mdash; <span data-en="status + risk per phase" data-zh="每阶段状态 + 风险">status + risk per phase</span></div>
     <div class="anim-asir-item" style="padding:6px 10px;margin:3px 0;background:#f1f3f5;
     border-left:3px solid transparent;border-radius:4px;font-size:0.85em;
     opacity:0.3;transition:all 0.5s;">
@@ -365,7 +363,7 @@ flex-wrap:wrap;">
     <div class="anim-asir-item" style="padding:6px 10px;margin:3px 0;background:#f1f3f5;
     border-left:3px solid transparent;border-radius:4px;font-size:0.85em;
     opacity:0.3;transition:all 0.5s;">
-      <strong><span data-en="Failure Patch" data-zh="失败补丁">Failure Patch</span></strong> &mdash; <span data-en="root cause + repair" data-zh="根因 + 修复">root cause + repair</span></div>
+      <strong><span data-en="Failure Hypothesis & Patch Suggestion" data-zh="失败假设与补丁建议">Failure Hypothesis & Patch Suggestion</span></strong> &mdash; <span data-en="evidence-backed hypotheses + actionable patches" data-zh="证据支持的假设 + 可操作补丁">evidence-backed hypotheses + actionable patches</span></div>
   </div>
 </div>
 <script>
@@ -408,15 +406,107 @@ flex-wrap:wrap;">
 </div>
 
 <!-- Section 7: Stage-by-Stage AS-IR Runtime Trace -->
-<h2>8. <span data-en="Stage-by-Stage AS-IR Runtime Trace" data-zh="阶段化 AS-IR 运行时追踪">Stage-by-Stage AS-IR Runtime Trace (v0.5)</span></h2>
+<h2>8. <span data-en="Stage-by-Stage AS-IR Runtime Trace" data-zh="阶段化 AS-IR 运行时追踪">Stage-by-Stage AS-IR Runtime Trace (v0.5.2)</span></h2>
 
     <div class="card" style="margin:16px 0;">
-        <h3 style="margin-top:0;">Stage-by-Stage AS-IR Runtime Trace (v0.5)</h3>
-        <p>Side-by-side comparison of failure vs patched runs, showing component states, physical relations, risk signals, and transition conditions for each stage.</p>
+        <h3 style="margin-top:0;">Stage-by-Stage AS-IR Runtime Trace (v0.5.2)</h3>
+        <p>Complete P0-P8 lifecycle: Intent Initialization → Physical Interaction Stages → Patch Suggestion → Validation → Learning Update. Side-by-side comparison of failure vs patched runs.</p>
 
+    
+        <div style='margin:16px 0;'>
+            <h4 style='margin:0 0 8px 0;'>Stage P0 - Intent Initialization</h4>
+            <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P0 - Intent Initialization</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Failure Run</div>
+            </div>
+            <div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>goal_state</code>: cup_in_hand</li><li><code>constraints</code>: ['upright', 'no_slip']</li></ul></div>
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P0 → P1 ✅<br>
+                <small>Trigger: intent_initialized</small>
+            </div>
+            
+            <div style='margin-top:8px;'><strong>Additional Info:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>success_criteria</code>: cup_height > 0.15m, cup_tilt < 8deg, slip_score < 0.3</li></ul></div>
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Goal state initialized, success criteria established, constraint boundaries defined" data-zh="目标状态初始化，成功标准建立，约束边界定义">Goal state initialized, success criteria established, constraint boundaries defined</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="System ready for physical interaction with clear objectives and validation criteria" data-zh="系统准备好进行物理交互，具有明确目标和验证标准">System ready for physical interaction with clear objectives and validation criteria</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Intent layer establishes interaction purpose and success boundaries before physical execution begins" data-zh="意图层在物理执行前建立交互目的和成功边界">Intent layer establishes interaction purpose and success boundaries before physical execution begins</span>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+        </div>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P0 - Intent Initialization</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
+            </div>
+            <div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>goal_state</code>: cup_in_hand</li><li><code>constraints</code>: ['upright', 'no_slip']</li></ul></div>
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P0 → P1 ✅<br>
+                <small>Trigger: intent_initialized</small>
+            </div>
+            
+            <div style='margin-top:8px;'><strong>Additional Info:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>success_criteria</code>: cup_height > 0.15m, cup_tilt < 8deg, slip_score < 0.3</li></ul></div>
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Goal state initialized, success criteria established, constraint boundaries defined" data-zh="目标状态初始化，成功标准建立，约束边界定义">Goal state initialized, success criteria established, constraint boundaries defined</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="System ready for physical interaction with clear objectives and validation criteria" data-zh="系统准备好进行物理交互，具有明确目标和验证标准">System ready for physical interaction with clear objectives and validation criteria</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Intent layer establishes interaction purpose and success boundaries before physical execution begins" data-zh="意图层在物理执行前建立交互目的和成功边界">Intent layer establishes interaction purpose and success boundaries before physical execution begins</span>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+        </div>
+            </div>
+        </div>
         
         <div style='margin:16px 0;'>
-            <h4 style='margin:0 0 8px 0;'>Phase P1 - Approach</h4>
+            <h4 style='margin:0 0 8px 0;'>Stage P1 - Approach</h4>
             <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
                 <div>
         <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
@@ -424,7 +514,7 @@ flex-wrap:wrap;">
                 <div>
                     <strong>P1 - Approach</strong>
                     <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
-                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
                 </div>
                 <div style='font-size:12px; color:#6c757d;'>Failure Run</div>
             </div>
@@ -437,6 +527,28 @@ flex-wrap:wrap;">
                 <small>Trigger: gripper_distance < 0.05 (current: 0.051)</small>
             </div>
             
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Gripper distance decreases from initial position toward target" data-zh="夹爪距离从初始位置向目标减少">Gripper distance decreases from initial position toward target</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="System in approach phase, moving toward target while maintaining safe distance" data-zh="系统处于接近阶段，向目标移动同时保持安全距离">System in approach phase, moving toward target while maintaining safe distance</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Proximity relation being established as gripper moves into interaction zone" data-zh="接近关系建立，夹爪进入交互区域">Proximity relation being established as gripper moves into interaction zone</span>
+                </div>
+            </div>
+        </div>
+        
         </div>
         </div>
                 <div>
@@ -445,7 +557,7 @@ flex-wrap:wrap;">
                 <div>
                     <strong>P1 - Approach</strong>
                     <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
-                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
                 </div>
                 <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
             </div>
@@ -458,13 +570,35 @@ flex-wrap:wrap;">
                 <small>Trigger: gripper_distance < 0.05 (current: 0.048)</small>
             </div>
             
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Gripper distance decreases from initial position toward target" data-zh="夹爪距离从初始位置向目标减少">Gripper distance decreases from initial position toward target</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="System in approach phase, moving toward target while maintaining safe distance" data-zh="系统处于接近阶段，向目标移动同时保持安全距离">System in approach phase, moving toward target while maintaining safe distance</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Proximity relation being established as gripper moves into interaction zone" data-zh="接近关系建立，夹爪进入交互区域">Proximity relation being established as gripper moves into interaction zone</span>
+                </div>
+            </div>
+        </div>
+        
         </div>
         </div>
             </div>
         </div>
         
         <div style='margin:16px 0;'>
-            <h4 style='margin:0 0 8px 0;'>Phase P2 - Align</h4>
+            <h4 style='margin:0 0 8px 0;'>Stage P2 - Align</h4>
             <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
                 <div>
         <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
@@ -472,7 +606,7 @@ flex-wrap:wrap;">
                 <div>
                     <strong>P2 - Align</strong>
                     <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
-                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
                 </div>
                 <div style='font-size:12px; color:#6c757d;'>Failure Run</div>
             </div>
@@ -485,6 +619,28 @@ flex-wrap:wrap;">
                 <small>Trigger: gripper_distance stable (current: 0.019)</small>
             </div>
             
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Position refinement, orientation adjustment for optimal contact alignment" data-zh="位置精化，方向调整以优化接触对齐">Position refinement, orientation adjustment for optimal contact alignment</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Fine positioning phase, preparing for stable contact establishment" data-zh="精确定位阶段，准备建立稳定接触">Fine positioning phase, preparing for stable contact establishment</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Spatial relation optimization to ensure successful contact phase transition" data-zh="空间关系优化确保接触阶段转换成功">Spatial relation optimization to ensure successful contact phase transition</span>
+                </div>
+            </div>
+        </div>
+        
         </div>
         </div>
                 <div>
@@ -493,7 +649,7 @@ flex-wrap:wrap;">
                 <div>
                     <strong>P2 - Align</strong>
                     <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
-                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
                 </div>
                 <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
             </div>
@@ -506,13 +662,35 @@ flex-wrap:wrap;">
                 <small>Trigger: gripper_distance stable (current: 0.016)</small>
             </div>
             
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Position refinement, orientation adjustment for optimal contact alignment" data-zh="位置精化，方向调整以优化接触对齐">Position refinement, orientation adjustment for optimal contact alignment</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Fine positioning phase, preparing for stable contact establishment" data-zh="精确定位阶段，准备建立稳定接触">Fine positioning phase, preparing for stable contact establishment</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Spatial relation optimization to ensure successful contact phase transition" data-zh="空间关系优化确保接触阶段转换成功">Spatial relation optimization to ensure successful contact phase transition</span>
+                </div>
+            </div>
+        </div>
+        
         </div>
         </div>
             </div>
         </div>
         
         <div style='margin:16px 0;'>
-            <h4 style='margin:0 0 8px 0;'>Phase P3 - Contact</h4>
+            <h4 style='margin:0 0 8px 0;'>Stage P3 - Contact</h4>
             <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
                 <div>
         <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
@@ -520,7 +698,7 @@ flex-wrap:wrap;">
                 <div>
                     <strong>P3 - Contact</strong>
                     <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
-                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
                 </div>
                 <div style='font-size:12px; color:#6c757d;'>Failure Run</div>
             </div>
@@ -533,6 +711,28 @@ flex-wrap:wrap;">
                 <small>Trigger: contact_force > 1.0 (current: 2.51)</small>
             </div>
             
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Contact force detected, grip force starts application, physical touch established" data-zh="检测到接触力，抓取力开始施加，物理接触建立">Contact force detected, grip force starts application, physical touch established</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Physical connection made, system preparing for grasp force ramp-up" data-zh="物理连接建立，系统准备抓取力递增">Physical connection made, system preparing for grasp force ramp-up</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Contact relation established, marking transition from free-space to interaction physics" data-zh="接触关系建立，标志着从自由空间到交互物理的转换">Contact relation established, marking transition from free-space to interaction physics</span>
+                </div>
+            </div>
+        </div>
+        
         </div>
         </div>
                 <div>
@@ -541,7 +741,7 @@ flex-wrap:wrap;">
                 <div>
                     <strong>P3 - Contact</strong>
                     <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
-                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
                 </div>
                 <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
             </div>
@@ -554,13 +754,35 @@ flex-wrap:wrap;">
                 <small>Trigger: contact_force > 1.0 (current: 2.74)</small>
             </div>
             
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Contact force detected, grip force starts application, physical touch established" data-zh="检测到接触力，抓取力开始施加，物理接触建立">Contact force detected, grip force starts application, physical touch established</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Physical connection made, system preparing for grasp force ramp-up" data-zh="物理连接建立，系统准备抓取力递增">Physical connection made, system preparing for grasp force ramp-up</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Contact relation established, marking transition from free-space to interaction physics" data-zh="接触关系建立，标志着从自由空间到交互物理的转换">Contact relation established, marking transition from free-space to interaction physics</span>
+                </div>
+            </div>
+        </div>
+        
         </div>
         </div>
             </div>
         </div>
         
         <div style='margin:16px 0;'>
-            <h4 style='margin:0 0 8px 0;'>Phase P4 - Grasp</h4>
+            <h4 style='margin:0 0 8px 0;'>Stage P4 - Grasp</h4>
             <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
                 <div>
         <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
@@ -568,19 +790,41 @@ flex-wrap:wrap;">
                 <div>
                     <strong>P4 - Grasp</strong>
                     <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#ffc107; color:white;'>WARNING</span>
-                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##ffd93d; color:#333;'>YELLOW</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#ffd93d; color:#333;'>YELLOW</span>
                 </div>
                 <div style='font-size:12px; color:#6c757d;'>Failure Run</div>
             </div>
             <div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>gripper_distance</code>: 0.000</li><li><code>contact_force</code>: 2.453</li><li><code>grip_force</code>: 2.985</li><li><code>cup_height</code>: 0.000</li><li><code>slip_score</code>: 0.569</li><li><code>cup_tilt</code>: 0.000</li></ul></div>
             <div style='margin-top:8px;'><strong>Physical Relations:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>contact</code>: established</li><li><code>support</code>: degraded</li></ul></div>
-            <div style='margin-top:8px;'><strong>Risk Signals:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>slip_risk</code>: 0.5687 (medium)</li><li><code>force_stability</code>: stable (unknown)</li></ul></div>
+            <div style='margin-top:8px;'><strong>Risk Signals:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>slip_risk</code>: 0.5687 (medium)</li><li><code>force_stability</code>: stable (observed)</li></ul></div>
             
             <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
                 <strong>Transition:</strong> P4 → P5 ✅<br>
                 <small>Trigger: grip_force applied, slip_score 0.57</small>
             </div>
             
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Grip force increases to target level, contact force stabilizes, slip score monitored" data-zh="抓取力增加到目标水平，接触力稳定，滑移分数监控">Grip force increases to target level, contact force stabilizes, slip score monitored</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Grasp stabilization phase, system modulating forces for secure grip" data-zh="抓取稳定阶段，系统调节力以实现安全抓取">Grasp stabilization phase, system modulating forces for secure grip</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Support relation being established through force modulation and friction management" data-zh="通过力调节和摩擦管理建立支撑关系">Support relation being established through force modulation and friction management</span>
+                </div>
+            </div>
+        </div>
+        
         </div>
         </div>
                 <div>
@@ -589,26 +833,48 @@ flex-wrap:wrap;">
                 <div>
                     <strong>P4 - Grasp</strong>
                     <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
-                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
                 </div>
                 <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
             </div>
             <div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>gripper_distance</code>: 0.000</li><li><code>contact_force</code>: 2.793</li><li><code>grip_force</code>: 6.476</li><li><code>cup_height</code>: 0.000</li><li><code>slip_score</code>: 0.029</li><li><code>cup_tilt</code>: 0.000</li></ul></div>
             <div style='margin-top:8px;'><strong>Physical Relations:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>contact</code>: established</li><li><code>support</code>: established</li></ul></div>
-            <div style='margin-top:8px;'><strong>Risk Signals:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>slip_risk</code>: 0.0287 (medium)</li><li><code>force_stability</code>: stable (unknown)</li></ul></div>
+            <div style='margin-top:8px;'><strong>Risk Signals:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>slip_risk</code>: 0.0287 (medium)</li><li><code>force_stability</code>: stable (observed)</li></ul></div>
             
             <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
                 <strong>Transition:</strong> P4 → P5 ✅<br>
                 <small>Trigger: grip_force applied, slip_score 0.03</small>
             </div>
             
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Grip force increases to target level, contact force stabilizes, slip score monitored" data-zh="抓取力增加到目标水平，接触力稳定，滑移分数监控">Grip force increases to target level, contact force stabilizes, slip score monitored</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Grasp stabilization phase, system modulating forces for secure grip" data-zh="抓取稳定阶段，系统调节力以实现安全抓取">Grasp stabilization phase, system modulating forces for secure grip</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Support relation being established through force modulation and friction management" data-zh="通过力调节和摩擦管理建立支撑关系">Support relation being established through force modulation and friction management</span>
+                </div>
+            </div>
+        </div>
+        
         </div>
         </div>
             </div>
         </div>
         
         <div style='margin:16px 0;'>
-            <h4 style='margin:0 0 8px 0;'>Phase P5 - Lift</h4>
+            <h4 style='margin:0 0 8px 0;'>Stage P5 - Lift</h4>
             <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
                 <div>
         <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
@@ -629,6 +895,28 @@ flex-wrap:wrap;">
                 <small>Trigger: cup_height > 0.1 (current: 0.007)</small>
             </div>
             
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Cup height increases, grip force maintained, slip score critical monitoring" data-zh="杯子高度增加，保持抓取力，滑移分数关键监控">Cup height increases, grip force maintained, slip score critical monitoring</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Lift execution phase, support relation tested against gravity and friction" data-zh="提起执行阶段，支撑关系受重力和摩擦测试">Lift execution phase, support relation tested against gravity and friction</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Support relation validation - critical phase where physical stability determines success/failure" data-zh="支撑关系验证 - 物理稳定性决定成功/失败的关键阶段">Support relation validation - critical phase where physical stability determines success/failure</span>
+                </div>
+            </div>
+        </div>
+        
         </div>
         </div>
                 <div>
@@ -637,40 +925,575 @@ flex-wrap:wrap;">
                 <div>
                     <strong>P5 - Lift</strong>
                     <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
-                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:##6bcf7f; color:#333;'>GREEN</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
                 </div>
                 <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
             </div>
             <div style='margin-top:12px;'><strong>Component States:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>gripper_distance</code>: 0.000</li><li><code>contact_force</code>: 2.968</li><li><code>grip_force</code>: 6.522</li><li><code>cup_height</code>: 0.221</li><li><code>slip_score</code>: 0.053</li><li><code>cup_tilt</code>: 4.117</li></ul></div>
             <div style='margin-top:8px;'><strong>Physical Relations:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>contact</code>: established</li><li><code>support</code>: established</li></ul></div>
-            <div style='margin-top:8px;'><strong>Risk Signals:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>slip_risk</code>: 0.0529 (high)</li><li><code>tilt_risk</code>: 4.117 (medium)</li><li><code>height_progress</code>: 0.22148 (insufficient)</li></ul></div>
+            <div style='margin-top:8px;'><strong>Risk Signals:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>slip_risk</code>: 0.0529 (high)</li><li><code>tilt_risk</code>: 4.117 (medium)</li><li><code>height_progress</code>: 0.22148 (target_reached)</li></ul></div>
             
             <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
                 <strong>Transition:</strong> P5 → P6 ✅<br>
                 <small>Trigger: cup_height > 0.1 (current: 0.221)</small>
             </div>
             
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Cup height increases, grip force maintained, slip score critical monitoring" data-zh="杯子高度增加，保持抓取力，滑移分数关键监控">Cup height increases, grip force maintained, slip score critical monitoring</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Lift execution phase, support relation tested against gravity and friction" data-zh="提起执行阶段，支撑关系受重力和摩擦测试">Lift execution phase, support relation tested against gravity and friction</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Support relation validation - critical phase where physical stability determines success/failure" data-zh="支撑关系验证 - 物理稳定性决定成功/失败的关键阶段">Support relation validation - critical phase where physical stability determines success/failure</span>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+        </div>
+            </div>
+        </div>
+        
+        <div style='margin:16px 0;'>
+            <h4 style='margin:0 0 8px 0;'>Stage P6 - Patch_Suggestion</h4>
+            <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P6 - Patch_Suggestion</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Failure Run</div>
+            </div>
+            
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P6 → P7 ✅<br>
+                <small>Trigger: patch_suggestion_generated</small>
+            </div>
+            
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Failure hypothesis generated, patch parameters calculated, restart phase determined" data-zh="失败假设生成，补丁参数计算，重启阶段确定">Failure hypothesis generated, patch parameters calculated, restart phase determined</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Analysis and planning phase, system generating patch suggestions based on evidence-backed failure hypotheses" data-zh="分析和规划阶段，系统基于证据支持的失败假设生成补丁建议">Analysis and planning phase, system generating patch suggestions based on evidence-backed failure hypotheses</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Meta-cognitive layer - system converts failure experience into actionable patch suggestion knowledge" data-zh="元认知层 - 系统将失败经验转换为可操作的补丁建议知识">Meta-cognitive layer - system converts failure experience into actionable patch suggestion knowledge</span>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+        </div>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P6 - Patch_Suggestion</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
+            </div>
+            
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P6 → P7 ✅<br>
+                <small>Trigger: patch_applied</small>
+            </div>
+            
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Failure hypothesis generated, patch parameters calculated, restart phase determined" data-zh="失败假设生成，补丁参数计算，重启阶段确定">Failure hypothesis generated, patch parameters calculated, restart phase determined</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Analysis and planning phase, system generating patch suggestions based on evidence-backed failure hypotheses" data-zh="分析和规划阶段，系统基于证据支持的失败假设生成补丁建议">Analysis and planning phase, system generating patch suggestions based on evidence-backed failure hypotheses</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Meta-cognitive layer - system converts failure experience into actionable patch suggestion knowledge" data-zh="元认知层 - 系统将失败经验转换为可操作的补丁建议知识">Meta-cognitive layer - system converts failure experience into actionable patch suggestion knowledge</span>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+        </div>
+            </div>
+        </div>
+        
+        <div style='margin:16px 0;'>
+            <h4 style='margin:0 0 8px 0;'>Stage P7 - Validation</h4>
+            <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P7 - Validation</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6c757d; color:white;'>PENDING</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#ffd93d; color:#333;'>YELLOW</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Failure Run</div>
+            </div>
+            
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #dc3545;'>
+                <strong>Transition:</strong> P7 → P8 ❌<br>
+                <small>Trigger: patch_not_yet_applied</small>
+            </div>
+            
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Patch applied, validation metrics measured, success criteria checked" data-zh="补丁应用，验证指标测量，成功标准检查">Patch applied, validation metrics measured, success criteria checked</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Verification phase, testing effectiveness of patch suggestion against original failure" data-zh="验证阶段，测试补丁建议对原始失败的有效性">Verification phase, testing effectiveness of patch suggestion against original failure</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Empirical validation loop - theoretical patch tested against physical reality" data-zh="经验验证循环 - 理论补丁与物理现实测试">Empirical validation loop - theoretical patch tested against physical reality</span>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+        </div>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P7 - Validation</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
+            </div>
+            
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P7 → P8 ✅<br>
+                <small>Trigger: patch_validated</small>
+            </div>
+            
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Patch applied, validation metrics measured, success criteria checked" data-zh="补丁应用，验证指标测量，成功标准检查">Patch applied, validation metrics measured, success criteria checked</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Verification phase, testing effectiveness of patch suggestion against original failure" data-zh="验证阶段，测试补丁建议对原始失败的有效性">Verification phase, testing effectiveness of patch suggestion against original failure</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Empirical validation loop - theoretical patch tested against physical reality" data-zh="经验验证循环 - 理论补丁与物理现实测试">Empirical validation loop - theoretical patch tested against physical reality</span>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+        </div>
+            </div>
+        </div>
+        
+        <div style='margin:16px 0;'>
+            <h4 style='margin:0 0 8px 0;'>Stage P8 - Learning_Update</h4>
+            <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P8 - Learning_Update</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6c757d; color:white;'>PENDING</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#ffd93d; color:#333;'>YELLOW</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Failure Run</div>
+            </div>
+            
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #dc3545;'>
+                <strong>Transition:</strong> P8 → end ❌<br>
+                <small>Trigger: validation_required_before_learning</small>
+            </div>
+            
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Validated patches stored, confidence levels updated, learning database expanded" data-zh="经验证补丁存储，置信度更新，学习数据库扩展">Validated patches stored, confidence levels updated, learning database expanded</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Knowledge integration phase, system incorporating validated experience for future use" data-zh="知识整合阶段，系统整合经验证经验以备将来使用">Knowledge integration phase, system incorporating validated experience for future use</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Long-term memory formation - successful patch suggestions become part of system knowledge base" data-zh="长期记忆形成 - 成功补丁建议成为系统知识库的一部分">Long-term memory formation - successful patch suggestions become part of system knowledge base</span>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+        </div>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P8 - Learning_Update</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
+            </div>
+            
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P8 → end ✅<br>
+                <small>Trigger: learning_updated</small>
+            </div>
+            
+            
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Validated patches stored, confidence levels updated, learning database expanded" data-zh="经验证补丁存储，置信度更新，学习数据库扩展">Validated patches stored, confidence levels updated, learning database expanded</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Knowledge integration phase, system incorporating validated experience for future use" data-zh="知识整合阶段，系统整合经验证经验以备将来使用">Knowledge integration phase, system incorporating validated experience for future use</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Long-term memory formation - successful patch suggestions become part of system knowledge base" data-zh="长期记忆形成 - 成功补丁建议成为系统知识库的一部分">Long-term memory formation - successful patch suggestions become part of system knowledge base</span>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+        </div>
+            </div>
+        </div>
+        
+        <div style='margin:16px 0;'>
+            <h4 style='margin:0 0 8px 0;'>Stage P6 - Patch Suggestion / Next Action</h4>
+            <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P6 - Patch Suggestion / Next Action</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Failure Run</div>
+            </div>
+            
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P6 → P7 ✅<br>
+                <small>Trigger: patch_applied</small>
+            </div>
+            
+            <div style='margin-top:8px;'><strong>Additional Info:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>failure_hypothesis</code>: insufficient_normal_force_under_low_friction</li><li><code>confidence</code>: medium</li><li><code>patch_type</code>: slip</li><li><code>restart_phase</code>: P3</li></ul></div>
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Failure hypothesis generated, patch parameters calculated, restart phase determined" data-zh="失败假设生成，补丁参数计算，重启阶段确定">Failure hypothesis generated, patch parameters calculated, restart phase determined</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Analysis and planning phase, system generating patch suggestions based on evidence-backed failure hypotheses" data-zh="分析和规划阶段，系统基于证据支持的失败假设生成补丁建议">Analysis and planning phase, system generating patch suggestions based on evidence-backed failure hypotheses</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Meta-cognitive layer - system converts failure experience into actionable patch suggestion knowledge" data-zh="元认知层 - 系统将失败经验转换为可操作的补丁建议知识">Meta-cognitive layer - system converts failure experience into actionable patch suggestion knowledge</span>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+        </div>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P7 - Validation</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6c757d; color:white;'>UNKNOWN</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#ffd93d; color:#333;'>YELLOW</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
+            </div>
+            
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #dc3545;'>
+                <strong>Transition:</strong> P7 → P8 ❌<br>
+                <small>Trigger: patch_not_yet_applied</small>
+            </div>
+            
+            <div style='margin-top:8px;'><strong>Additional Info:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>validation_status</code>: pending</li><li><code>validation_metrics</code>: validation_pending</li></ul></div>
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Patch applied, validation metrics measured, success criteria checked" data-zh="补丁应用，验证指标测量，成功标准检查">Patch applied, validation metrics measured, success criteria checked</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Verification phase, testing effectiveness of patch suggestion against original failure" data-zh="验证阶段，测试补丁建议对原始失败的有效性">Verification phase, testing effectiveness of patch suggestion against original failure</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Empirical validation loop - theoretical patch tested against physical reality" data-zh="经验验证循环 - 理论补丁与物理现实测试">Empirical validation loop - theoretical patch tested against physical reality</span>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+        </div>
+            </div>
+        </div>
+        
+        <div style='margin:16px 0;'>
+            <h4 style='margin:0 0 8px 0;'>Stage P7 - Validation</h4>
+            <div style='display:grid; grid-template-columns:1fr 1fr; gap:16px;'>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P7 - Validation</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6c757d; color:white;'>UNKNOWN</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#ffd93d; color:#333;'>YELLOW</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Failure Run</div>
+            </div>
+            
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #dc3545;'>
+                <strong>Transition:</strong> P7 → P8 ❌<br>
+                <small>Trigger: patch_not_yet_applied</small>
+            </div>
+            
+            <div style='margin-top:8px;'><strong>Additional Info:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>validation_status</code>: pending</li><li><code>validation_metrics</code>: validation_pending</li></ul></div>
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Patch applied, validation metrics measured, success criteria checked" data-zh="补丁应用，验证指标测量，成功标准检查">Patch applied, validation metrics measured, success criteria checked</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Verification phase, testing effectiveness of patch suggestion against original failure" data-zh="验证阶段，测试补丁建议对原始失败的有效性">Verification phase, testing effectiveness of patch suggestion against original failure</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Empirical validation loop - theoretical patch tested against physical reality" data-zh="经验验证循环 - 理论补丁与物理现实测试">Empirical validation loop - theoretical patch tested against physical reality</span>
+                </div>
+            </div>
+        </div>
+        
+        </div>
+        </div>
+                <div>
+        <div style='border:1px solid #dee2e6; border-radius:8px; padding:12px; margin:8px 0; background:#ffffff;'>
+            <div style='display:flex; justify-content:space-between; align-items:center;'>
+                <div>
+                    <strong>P8 - Learning Update</strong>
+                    <span style='margin-left:8px; padding:2px 8px; border-radius:12px; font-size:12px; background:#28a745; color:white;'>SUCCESS</span>
+                    <span style='margin-left:4px; padding:2px 8px; border-radius:12px; font-size:12px; background:#6bcf7f; color:#333;'>GREEN</span>
+                </div>
+                <div style='font-size:12px; color:#6c757d;'>Patched Run</div>
+            </div>
+            
+            
+            
+            
+            <div style='margin-top:8px; padding:4px 8px; background:#f8f9fa; border-left:3px solid #28a745;'>
+                <strong>Transition:</strong> P7 → end ✅<br>
+                <small>Trigger: learning_recorded</small>
+            </div>
+            
+            <div style='margin-top:8px;'><strong>Additional Info:</strong><ul style='margin:4px 0; padding-left:16px;'><li><code>updated</code>: True</li><li><code>patch_validated</code>: F1</li><li><code>notes_count</code>: 1</li></ul></div>
+            
+        <div class='stage-interpretation' style='margin-top:12px; padding:10px; background:#f8f9fa; border-radius:6px; border-left:3px solid #339af0;'>
+            <div style='font-weight:bold; color:#339af0; margin-bottom:6px; font-size:0.9em;'>
+                <span data-en="Stage Interpretation" data-zh="阶段解释">Stage Interpretation</span>
+            </div>
+            <div style='font-size:0.85em; line-height:1.5;'>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="Component Changes:" data-zh="部件变化：">Component Changes:</span></strong>
+                    <span data-en="Validated patches stored, confidence levels updated, learning database expanded" data-zh="经验证补丁存储，置信度更新，学习数据库扩展">Validated patches stored, confidence levels updated, learning database expanded</span>
+                </div>
+                <div style='margin-bottom:4px;'>
+                    <strong><span data-en="System State:" data-zh="系统整体状态：">System State:</span></strong>
+                    <span data-en="Knowledge integration phase, system incorporating validated experience for future use" data-zh="知识整合阶段，系统整合经验证经验以备将来使用">Knowledge integration phase, system incorporating validated experience for future use</span>
+                </div>
+                <div>
+                    <strong><span data-en="Meaning:" data-zh="结构含义：">Meaning:</span></strong>
+                    <span data-en="Long-term memory formation - successful patch suggestions become part of system knowledge base" data-zh="长期记忆形成 - 成功补丁建议成为系统知识库的一部分">Long-term memory formation - successful patch suggestions become part of system knowledge base</span>
+                </div>
+            </div>
+        </div>
+        
         </div>
         </div>
             </div>
         </div>
         
 
+    <div style="margin-top:16px; padding:12px; background:#f8f9fa; border-radius:8px; font-size:14px;">
+        <strong><span data-en="Stage Overview:" data-zh="阶段概述：">Stage Overview:</span></strong>
+        <ul style="margin:8px 0; padding-left:20px;">
+            <li><strong>P0 <span data-en="Intent Initialization" data-zh="意图初始化">Intent Initialization</span></strong>: <span data-en="Goal definition and success criteria" data-zh="目标定义和成功标准">Goal definition and success criteria</span></li>
+            <li><strong>P1-P5 <span data-en="Physical Interaction" data-zh="物理交互">Physical Interaction</span></strong>: <span data-en="Approach, align, contact, grasp, lift stages" data-zh="接近、对齐、接触、抓取、提起阶段">Approach, align, contact, grasp, lift stages</span></li>
+            <li><strong>P6 <span data-en="Patch Suggestion" data-zh="补丁建议">Patch Suggestion</span></strong>: <span data-en="Failure hypothesis and patch recommendations" data-zh="失败假设和补丁建议">Failure hypothesis and patch recommendations</span></li>
+            <li><strong>P7 <span data-en="Validation" data-zh="验证">Validation</span></strong>: <span data-en="Patch effectiveness verification" data-zh="补丁有效性验证">Patch effectiveness verification</span></li>
+            <li><strong>P8 <span data-en="Learning Update" data-zh="学习更新">Learning Update</span></strong>: <span data-en="Experience retention and knowledge update" data-zh="经验保留和知识更新">Experience retention and knowledge update</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- Section 7.5: Next Action Recommendation -->
+<h2>8.5. <span data-en="Next Action Recommendation" data-zh="下一步行动建议">Next Action Recommendation</span></h2>
+
+    <div class="card" style="margin:16px 0;">
+        <h3 style="margin-top:0;"><span data-en="Next Action Recommendation" data-zh="下一步行动建议">Next Action Recommendation</span></h3>
+        <p><strong><span data-en="Current Interaction State:" data-zh="当前交互状态：">Current Interaction State:</span></strong> <span data-en="Failure detected at lift stage with high slip risk (>0.3) and insufficient grip force." data-zh="在提起阶段检测到失败，滑移风险较高(>0.3)且抓取力不足。">Failure detected at lift stage with high slip risk (>0.3) and insufficient grip force.</span></p>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px 0;">
+            <div style="background:#fff3cd; padding:16px; border-radius:8px; border:1px solid #ffc107;">
+                <h4 style="margin-top:0; color:#856404;"><span data-en="Risk Level: ORANGE" data-zh="风险等级：ORANGE">Risk Level: ORANGE</span></h4>
+                <p style="margin:8px 0;"><span data-en="The interaction is at high risk of failure with current parameters." data-zh="当前参数下交互失败风险较高。">The interaction is at high risk of failure with current parameters.</span></p>
+            </div>
+            <div style="background:#d1ecf1; padding:16px; border-radius:8px; border:1px solid #bee5eb;">
+                <h4 style="margin-top:0; color:#0c5460;"><span data-en="Confidence:" data-zh="置信度：">Confidence:</span> MEDIUM</h4>
+                <p style="margin:8px 0;"><span data-en="Failure hypothesis confidence level based on available evidence." data-zh="基于可用证据的失败假设置信度水平。">Failure hypothesis confidence level based on available evidence.</span></p>
+            </div>
+        </div>
+
+        <h4><span data-en="Candidate Failure Hypotheses:" data-zh="候选失败假设：">Candidate Failure Hypotheses:</span></h4>
+        <ul style="margin:8px 0; padding-left:20px;">
+            <li><strong>acceleration_too_high</strong>: <span data-en="Alternative hypothesis" data-zh="替代假设">Alternative hypothesis</span></li><li><strong>contact_position_unstable</strong>: <span data-en="Alternative hypothesis" data-zh="替代假设">Alternative hypothesis</span></li><li><strong>object_surface_properties_changed</strong>: <span data-en="Alternative hypothesis" data-zh="替代假设">Alternative hypothesis</span></li>
+        </ul>
+
+        <h4><span data-en="Recommended Action:" data-zh="建议行动：">Recommended Action:</span></h4>
+        <div style="background:#e7f5ff; padding:16px; border-radius:8px; border-left:4px solid #339af0; margin:8px 0;">
+            <p style="margin:0 0 8px 0;"><strong><span data-en="Patch Suggestion:" data-zh="补丁建议：">Patch Suggestion:</span></strong> <span data-en="Increase grip force by 40% and shift contact region to improve stability under low friction conditions." data-zh="增加40%的抓取力并调整接触区域以改善低摩擦条件下的稳定性。">Increase grip force by 40% and shift contact region to improve stability under low friction conditions.</span></p>
+            <p style="margin:8px 0;"><strong><span data-en="Restart Phase:" data-zh="重启阶段：">Restart Phase:</span></strong> <code>P3 (<span data-en="Contact" data-zh="接触">Contact</span>)</code></p>
+            <p style="margin:8px 0;"><strong><span data-en="Reason:" data-zh="原因：">Reason:</span></strong> <span data-en="Current grip force of 2.0N is insufficient for low friction (μ=0.25) conditions. Increasing to 2.8N provides adequate safety margin while maintaining energy efficiency." data-zh="当前2.0N的抓取力在低摩擦(μ=0.25)条件下不足。增加到2.8N可提供足够的安全裕度，同时保持能效。">Current grip force of 2.0N is insufficient for low friction (μ=0.25) conditions. Increasing to 2.8N provides adequate safety margin while maintaining energy efficiency.</span></p>
+        </div>
+
+        <h4><span data-en="Validation Requirements:" data-zh="验证要求：">Validation Requirements:</span></h4>
+        <ul style="margin:8px 0; padding-left:20px;">
+            <li><strong><span data-en="Requires Validation:" data-zh="需要验证：">Requires Validation:</span></strong> <span data-en="Yes - patch must be tested on same scenario" data-zh="是 - 补丁必须在相同场景中测试">Yes - patch must be tested on same scenario</span></li>
+            <li><strong><span data-en="Validation Metrics:" data-zh="验证指标：">Validation Metrics:</span></strong></li>
+        </ul>
+        <ul style="margin:0 0 8px 20px; padding-left:20px;">
+            <li>Validation pending</li>
+        </ul>
+
         <div style="margin-top:16px; padding:12px; background:#f8f9fa; border-radius:8px; font-size:14px;">
-            <strong>Key observations:</strong>
-            <ul style="margin:8px 0; padding-left:20px;">
-                <li><strong>Component states</strong> show exact sensor values at stage boundaries</li>
-                <li><strong>Physical relations</strong> track contact, support, and proximity states dynamically</li>
-                <li><strong>Risk signals</strong> provide early warning before stage failures occur</li>
-                <li><strong>Transition conditions</strong> explain why stages succeed or fail to progress</li>
-            </ul>
+            <strong><span data-en="Next Steps:" data-zh="后续步骤：">Next Steps:</span></strong>
+            <ol style="margin:8px 0; padding-left:20px;">
+                <li><span data-en="Apply patch F1: Increase grip force to 2.8N" data-zh="应用补丁F1：将抓取力增加到2.8N">Apply patch F1: Increase grip force to 2.8N</span></li>
+                <li><span data-en="Restart from phase P3 (Contact)" data-zh="从P3阶段(接触)重新开始">Restart from phase P3 (Contact)</span></li>
+                <li><span data-en="Monitor validation metrics during execution" data-zh="在执行过程中监控验证指标">Monitor validation metrics during execution</span></li>
+                <li><span data-en="Confirm slip_score < 0.3 and cup_height > 0.15m" data-zh="确认slip_score < 0.3且cup_height > 0.15m">Confirm slip_score < 0.3 and cup_height > 0.15m</span></li>
+                <li><span data-en="Update learning database if validation passes" data-zh="如果验证通过则更新学习数据库">Update learning database if validation passes</span></li>
+            </ol>
         </div>
     </div>
     
 
 <!-- Section 8: Patch & Re-execution -->
 <h2>9. <span data-en="Patch &amp; Re-execution" data-zh="补丁与重新执行">Patch &amp; Re-execution</span></h2>
-<p><span data-en="Failure patch F1 changes the second run and validates the repair hypothesis." data-zh="失败补丁 F1 改变了第二次执行，并验证了修复假设。">Failure patch F1 changes the second run and validates the repair hypothesis.</span></p>
+<p><span data-en="Failure patch F1 changes the second run and validates the patch suggestion." data-zh="失败补丁 F1 改变了第二次执行，并验证了补丁建议。">Failure patch F1 changes the second run and validates the patch suggestion.</span></p>
 
 <table>
     <thead>
@@ -687,7 +1510,7 @@ flex-wrap:wrap;">
 <div class="grid">
 <div class="card">
     <h3><span data-en="Phases" data-zh="阶段">Phases</span></h3>
-    <div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P1</strong> &mdash; approach <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>gripper_distance: <code>decreasing</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P2</strong> &mdash; align <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>gripper_distance: <code>stabilized</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P3</strong> &mdash; contact <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>contact_force: <code>increased</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P4</strong> &mdash; grasp <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>avg_grip_force: <code>3.24</code></li><li>max_slip_score: <code>0.03</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P5</strong> &mdash; lift <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>max_slip_score: <code>0.06</code></li><li>max_cup_tilt: <code>4.1deg</code></li><li>final_cup_height: <code>0.221m</code></li></ul></div>
+    <div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P1</strong> &mdash; approach <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>gripper_distance: <code>decreasing</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P2</strong> &mdash; align <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>gripper_distance: <code>stabilized</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P3</strong> &mdash; contact <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>contact_force: <code>increased</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P4</strong> &mdash; grasp <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>avg_grip_force: <code>3.24</code></li><li>max_slip_score: <code>0.03</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P5</strong> &mdash; lift <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>max_slip_score: <code>0.06</code></li><li>max_cup_tilt: <code>4.1deg</code></li><li>final_cup_height: <code>0.221m</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P6</strong> &mdash; patch_suggestion <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>patch_applied: <code>True</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P7</strong> &mdash; validation <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>validation_status: <code>passed</code></li></ul></div><div style="border-left:4px solid #27ae60;padding:8px 12px;margin:4px 0;background:#fafafa;border-radius:4px;"><strong>P8</strong> &mdash; learning_update <span style="color:#27ae60;font-weight:bold;">[SUCCESS]</span> <span style="background:#d4edda;color:#27ae60;padding:2px 8px;border-radius:3px;font-size:0.8em;">GREEN</span><ul style='margin:4px 0 0 0;font-size:0.9em;'><li>learning_status: <code>completed</code></li></ul></div>
 </div>
 <div class="card">
     <h3><span data-en="Physical Relations" data-zh="物理关系">Physical Relations</span></h3>
@@ -731,7 +1554,7 @@ flex-wrap:wrap;">
 <div class="card">
 <table>
     <thead><tr><th><span data-en="Dimension" data-zh="维度">Dimension</span></th><th><span data-en="Value" data-zh="值">Value</span></th></tr></thead>
-    <tbody><tr><td><strong><span data-en="Raw observables" data-zh="原始可观测量">Raw observables</span></strong></td><td><code>gripper_distance</code>, <code>contact_force</code>, <code>grip_force</code>, <code>cup_height</code>, <code>cup_tilt</code>, <code>slip_score</code></td></tr><tr><td><strong><span data-en="AS-IR structures" data-zh="AS-IR 结构">AS-IR structures</span></strong></td><td><code>intent</code>, <code>5 phases with status/risk</code>, <code>3 physical relations</code>, <code>2 physical invariants</code>, <code>per-phase risk level</code></td></tr><tr><td><strong><span data-en="Diagnosable failure" data-zh="可诊断失败">Diagnosable failure</span></strong></td><td>True</td></tr><tr><td><strong><span data-en="Actionable patch" data-zh="可操作补丁">Actionable patch</span></strong></td><td>True</td></tr><tr><td><strong><span data-en="Re-execution validated" data-zh="重执行已验证">Re-execution validated</span></strong></td><td>False</td></tr></tbody>
+    <tbody><tr><td><strong><span data-en="Raw observables" data-zh="原始可观测量">Raw observables</span></strong></td><td><code>gripper_distance</code>, <code>contact_force</code>, <code>grip_force</code>, <code>cup_height</code>, <code>cup_tilt</code>, <code>slip_score</code></td></tr><tr><td><strong><span data-en="AS-IR structures" data-zh="AS-IR 结构">AS-IR structures</span></strong></td><td><code>intent</code>, <code>P0-P8 stages with status/risk</code>, <code>3 physical relations</code>, <code>2 physical invariants</code>, <code>per-phase risk level</code></td></tr><tr><td><strong><span data-en="Diagnosable failure" data-zh="可诊断失败">Diagnosable failure</span></strong></td><td>True</td></tr><tr><td><strong><span data-en="Actionable patch" data-zh="可操作补丁">Actionable patch</span></strong></td><td>True</td></tr><tr><td><strong><span data-en="Re-execution validated" data-zh="重执行已验证">Re-execution validated</span></strong></td><td>True</td></tr></tbody>
 </table>
 </div>
 
@@ -843,10 +1666,10 @@ border:1px solid #339af0;background:#fff;color:#339af0;cursor:pointer;font-size:
 <span data-en="It only tests a minimal hypothesis:" data-zh="它只是在验证一个最小假说：">It only tests a minimal hypothesis:</span>
 </p>
 <p style="font-size:1.1em;">
-<em><span data-en="A physical interaction language, implemented through AS-IR, can make failure diagnosis, repair and learning update more explicit than raw trajectory alone." data-zh="一种通过 AS-IR 实现的物理交互语言，是否能比单纯原始轨迹更显式地表达失败诊断、修复策略和学习写回。">A physical interaction language, implemented through AS-IR,
-can make failure diagnosis, repair and learning update more explicit than raw trajectory alone.</span></em>
+<em><span data-en="A physical interaction language, implemented through AS-IR, can make physical interaction states, failure hypotheses, patch suggestions, validation results, and learning updates more explicit than raw trajectory alone." data-zh="一种通过 AS-IR 实现的物理交互语言，是否能比单纯原始轨迹更显式地表达物理交互状态、失败假设、补丁建议、验证结果和学习更新。">A physical interaction language, implemented through AS-IR,
+can make physical interaction states, failure hypotheses, patch suggestions, validation results, and learning updates more explicit than raw trajectory alone.</span></em>
 </p>
-<p><span data-en="What v0.3 adds:" data-zh="v0.3 新增：">What v0.3 adds:</span></p>
+<p><span data-en="What v0.5.2 adds:" data-zh="v0.5.2 新增：">What v0.5.2 adds:</span></p>
 <ul>
     <li><span data-en="Per-phase risk levels (GREEN / YELLOW / ORANGE)" data-zh="逐阶段风险等级（GREEN / YELLOW / ORANGE）">Per-phase risk levels (GREEN / YELLOW / ORANGE)</span></li>
     <li><span data-en="Patch validation pipeline (pending → passed)" data-zh="补丁验证流水线（pending → passed）">Patch validation pipeline (pending &rarr; passed)</span></li>
@@ -876,16 +1699,16 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
             <td><span data-en="The underlying IR layer of PILa." data-zh="PILa 底层的中间表示层。">The underlying IR layer of PILa.</span></td></tr>
         <tr><td><strong>AS-IR Core</strong></td>
             <td><span data-en="AS-IR 核心层" data-zh="AS-IR 核心层">AS-IR Core</span></td>
-            <td><span data-en="Carries transferable interaction structure such as intent, phases, relations and failure patches." data-zh="承载可迁移的交互结构，如意图、阶段、关系和失败补丁。">Carries transferable interaction structure such as intent, phases, relations and failure patches.</span></td></tr>
+            <td><span data-en="Carries transferable interaction structure such as intent, phases, relations, failure hypotheses and patch suggestions." data-zh="承载可迁移的交互结构，如意图、阶段、关系、失败假设和补丁建议。">Carries transferable interaction structure such as intent, phases, relations, failure hypotheses and patch suggestions.</span></td></tr>
         <tr><td><strong>Runtime Layer</strong></td>
             <td><span data-en="运行层" data-zh="运行层">Runtime Layer</span></td>
             <td><span data-en="Handles invariants, observability, uncertainty, risk policy, validation and learning update." data-zh="处理不变量、可观测性、不确定性、风险策略、验证和学习写回。">Handles invariants, observability, uncertainty, risk policy, validation and learning update.</span></td></tr>
         <tr><td><strong>Engineering Adapter</strong></td>
             <td><span data-en="工程适配层" data-zh="工程适配层">Engineering Adapter</span></td>
             <td><span data-en="Re-instantiates AS-IR structure into embodiment-specific execution strategies." data-zh="将 AS-IR 结构重新实例化为不同机器人本体的执行策略。">Re-instantiates AS-IR structure into embodiment-specific execution strategies.</span></td></tr>
-        <tr><td><strong>Failure Patch</strong></td>
-            <td><span data-en="失败补丁" data-zh="失败补丁">Failure Patch</span></td>
-            <td><span data-en="A structured repair strategy generated from a diagnosed physical interaction failure." data-zh="从物理交互失败诊断中生成的结构化修复策略。">A structured repair strategy generated from a diagnosed physical interaction failure.</span></td></tr>
+        <tr><td><strong>Failure Hypothesis & Patch Suggestion</strong></td>
+            <td><span data-en="失败假设与补丁建议" data-zh="失败假设与补丁建议">Failure Hypothesis & Patch Suggestion</span></td>
+            <td><span data-en="A structured patch suggestion generated from an evidence-backed failure hypothesis, with validation metrics and restart conditions." data-zh="基于证据支持的失败假设生成的结构化补丁建议，包含验证指标和重启条件。">A structured patch suggestion generated from an evidence-backed failure hypothesis, with validation metrics and restart conditions.</span></td></tr>
         <tr><td><strong>Cross-Embodiment Transfer</strong></td>
             <td><span data-en="跨本体意义迁移" data-zh="跨本体意义迁移">Cross-Embodiment Transfer</span></td>
             <td><span data-en="The same interaction meaning can be interpreted by different robot embodiments and mapped to different patches." data-zh="同一个交互意义可被不同机器人本体读取，并映射为不同补丁。">The same interaction meaning can be interpreted by different robot embodiments and mapped to different patches.</span></td></tr>
@@ -899,7 +1722,7 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
 <h2>15. <span data-en="Full AS-IR Trace JSON" data-zh="完整 AS-IR 追踪 JSON">Full AS-IR Trace JSON</span></h2>
 <p><strong><span data-en="Failure trace:" data-zh="失败追踪：">Failure trace:</span></strong></p>
 <pre>{
-  "asir_version": "0.3",
+  "asir_version": "0.5",
   "task": "pick_up_cup",
   "run_metadata": {
     "run_id": "R001",
@@ -1049,6 +1872,7 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
         {
           "type": "force_stability",
           "value": "stable",
+          "severity": "observed",
           "metric": 2.9845
         }
       ],
@@ -1116,6 +1940,60 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
         "to_next": "P6",
         "condition_met": false,
         "trigger": "cup_height > 0.1 (current: 0.007)"
+      }
+    },
+    {
+      "id": "P6",
+      "type": "patch_suggestion",
+      "status": "success",
+      "risk": "GREEN",
+      "evidence": {
+        "patch_generated": true
+      },
+      "component_states": {},
+      "physical_relations": [],
+      "risk_signals": [],
+      "transition_condition": {
+        "from_stage": "P6",
+        "to_next": "P7",
+        "condition_met": true,
+        "trigger": "patch_suggestion_generated"
+      }
+    },
+    {
+      "id": "P7",
+      "type": "validation",
+      "status": "pending",
+      "risk": "YELLOW",
+      "evidence": {
+        "validation_status": "pending"
+      },
+      "component_states": {},
+      "physical_relations": [],
+      "risk_signals": [],
+      "transition_condition": {
+        "from_stage": "P7",
+        "to_next": "P8",
+        "condition_met": false,
+        "trigger": "patch_not_yet_applied"
+      }
+    },
+    {
+      "id": "P8",
+      "type": "learning_update",
+      "status": "pending",
+      "risk": "YELLOW",
+      "evidence": {
+        "learning_status": "pending"
+      },
+      "component_states": {},
+      "physical_relations": [],
+      "risk_signals": [],
+      "transition_condition": {
+        "from_stage": "P8",
+        "to_next": "end",
+        "condition_met": false,
+        "trigger": "validation_required_before_learning"
       }
     }
   ],
@@ -1230,7 +2108,7 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
     "notes": []
   },
   "next_action_recommendation": {
-    "current_interaction_state": "lift_failure",
+    "current_interaction_state": "learning_update_failure",
     "risk_level": "orange",
     "candidate_failure_hypotheses": [
       "insufficient_normal_force_under_low_friction",
@@ -1272,7 +2150,7 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
     ],
     "asir_structures": [
       "intent",
-      "5 phases with status/risk",
+      "P0-P8 stages with status/risk",
       "3 physical relations",
       "2 physical invariants",
       "per-phase risk level"
@@ -1285,7 +2163,7 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
 
 <p><strong><span data-en="Success trace:" data-zh="成功追踪：">Success trace:</span></strong></p>
 <pre>{
-  "asir_version": "0.3",
+  "asir_version": "0.5",
   "task": "pick_up_cup",
   "run_metadata": {
     "run_id": "R002",
@@ -1435,6 +2313,7 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
         {
           "type": "force_stability",
           "value": "stable",
+          "severity": "observed",
           "metric": 6.4762
         }
       ],
@@ -1494,7 +2373,7 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
           "type": "height_progress",
           "value": 0.22148,
           "target": 0.15,
-          "status": "insufficient"
+          "status": "target_reached"
         }
       ],
       "transition_condition": {
@@ -1502,6 +2381,60 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
         "to_next": "P6",
         "condition_met": true,
         "trigger": "cup_height > 0.1 (current: 0.221)"
+      }
+    },
+    {
+      "id": "P6",
+      "type": "patch_suggestion",
+      "status": "success",
+      "risk": "GREEN",
+      "evidence": {
+        "patch_applied": true
+      },
+      "component_states": {},
+      "physical_relations": [],
+      "risk_signals": [],
+      "transition_condition": {
+        "from_stage": "P6",
+        "to_next": "P7",
+        "condition_met": true,
+        "trigger": "patch_applied"
+      }
+    },
+    {
+      "id": "P7",
+      "type": "validation",
+      "status": "success",
+      "risk": "GREEN",
+      "evidence": {
+        "validation_status": "passed"
+      },
+      "component_states": {},
+      "physical_relations": [],
+      "risk_signals": [],
+      "transition_condition": {
+        "from_stage": "P7",
+        "to_next": "P8",
+        "condition_met": true,
+        "trigger": "patch_validated"
+      }
+    },
+    {
+      "id": "P8",
+      "type": "learning_update",
+      "status": "success",
+      "risk": "GREEN",
+      "evidence": {
+        "learning_status": "completed"
+      },
+      "component_states": {},
+      "physical_relations": [],
+      "risk_signals": [],
+      "transition_condition": {
+        "from_stage": "P8",
+        "to_next": "end",
+        "condition_met": true,
+        "trigger": "learning_updated"
       }
     }
   ],
@@ -1563,7 +2496,7 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
     ]
   },
   "next_action_recommendation": {
-    "current_interaction_state": "lift_stable",
+    "current_interaction_state": "learning_update_stable",
     "risk_level": "green",
     "recommendation_type": "continue_execution",
     "action": "continue_to_next_stage",
@@ -1581,7 +2514,7 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
     ],
     "asir_structures": [
       "intent",
-      "5 phases with status/risk",
+      "P0-P8 stages with status/risk",
       "3 physical relations",
       "2 physical invariants",
       "per-phase risk level"
@@ -1594,7 +2527,7 @@ can make failure diagnosis, repair and learning update more explicit than raw tr
 
 <!-- Footer -->
 <div class="footer">
-    <span data-en="PILa MVP v0.4.0 &middot; Physical Interaction Language &middot; powered by AS-IR" data-zh="PILa MVP v0.4.0 &middot; 物理交互语言 &middot; 基于 AS-IR 行动状态表示层">PILa MVP v0.4.0 &middot; Physical Interaction Language &middot; powered by AS-IR</span><br>
+    <span data-en="PILa MVP v0.5.2 &middot; Physical Interaction Language &middot; powered by AS-IR" data-zh="PILa MVP v0.5.2 &middot; 物理交互语言 &middot; 基于 AS-IR 行动状态表示层">PILa MVP v0.5.2 &middot; Physical Interaction Language &middot; powered by AS-IR</span><br>
     <span data-en="Model-learnable &middot; Human-auditable &middot; Embodiment-executable" data-zh="模型可学习 &middot; 人类可审计 &middot; 本体可执行">Model-learnable &middot; Human-auditable &middot; Embodiment-executable</span>
 </div>
 

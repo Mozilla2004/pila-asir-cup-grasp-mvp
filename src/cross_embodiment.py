@@ -33,16 +33,35 @@ def load_robot_profiles(path: str | None = None) -> dict:
         return json.load(f)
 
 
-def _map_failure_to_rule(asir_trace: dict) -> str | None:
-    """Map AS-IR failure to a generic adapter rule key."""
+def _map_failure_to_rule(asir_trace: dict) -> str:
+    """Map AS-IR failure to a generic adapter rule key.
+
+    Returns meaningful failure meaning instead of None/unknown:
+    - support_degraded: Support relation failure (common case)
+    - no_failure_detected: Successful trajectory without failures
+    - unmapped_failure_pattern: Failure pattern doesn't match known rules
+    """
     patches = asir_trace.get("failure_patches", [])
+
+    # Check for successful trajectory (no failure patches)
     if not patches:
-        return None
+        # Check physical relations to determine if truly successful
+        relations = asir_trace.get("physical_relations", [])
+        support_relation = next((r for r in relations if r.get("type") == "support"), None)
+
+        if support_relation and support_relation.get("state") == "established":
+            return "no_failure_detected"
+        else:
+            return "unmapped_failure_pattern_requires_review"
+
+    # Map known failure patterns
     relations = asir_trace.get("physical_relations", [])
     for r in relations:
         if r.get("type") == "support" and r.get("state") in ("degraded", "broken"):
             return "support_degraded"
-    return None
+
+    # Failure exists but pattern doesn't match known rules
+    return "unmapped_failure_pattern_requires_review"
 
 
 def adapt_patch_for_robot(
@@ -65,10 +84,10 @@ def adapt_patch_for_robot(
         "morphology_type": robot_profile["morphology_type"],
         "contact_model": robot_profile["contact_model"],
         "source_failure_meaning": rule_key,
-        "source_root_cause": (
-            asir_trace["failure_patches"][0].get("failure_hypothesis", asir_trace["failure_patches"][0].get("root_cause", "unknown"))
+        "source_failure_hypothesis": (
+            asir_trace["failure_patches"][0].get("failure_hypothesis", asir_trace["failure_patches"][0].get("root_cause", "unmapped_failure"))
             if asir_trace.get("failure_patches")
-            else "unknown"
+            else "no_failure_hypothesis_required"
         ),
         "meaning_interpretation": {
             "shared_meaning": interp.get("shared_meaning", ""),
@@ -87,13 +106,13 @@ def run_cross_embodiment_transfer(
     rule_key = _map_failure_to_rule(asir_trace)
 
     transfer_result = {
-        "asir_version": "0.3",
+        "asir_version": "0.5",
         "source_trace_task": asir_trace.get("task", "unknown"),
         "source_failure_meaning": rule_key,
-        "source_root_cause": (
-            asir_trace["failure_patches"][0].get("failure_hypothesis", asir_trace["failure_patches"][0].get("root_cause", "unknown"))
+        "source_failure_hypothesis": (
+            asir_trace["failure_patches"][0].get("failure_hypothesis", asir_trace["failure_patches"][0].get("root_cause", "unmapped_failure"))
             if asir_trace.get("failure_patches")
-            else "unknown"
+            else "no_failure_hypothesis_required"
         ),
         "transfer_claim": "AS-IR transfers interaction meaning, not raw trajectory parameters.",
         "not_transferred": [

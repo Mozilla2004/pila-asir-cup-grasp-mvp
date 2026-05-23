@@ -1,4 +1,4 @@
-"""AS-IR Cup-Grasp MVP v0.3 — single-command demo runner."""
+"""AS-IR Cup-Grasp MVP v0.5 — single-command demo runner."""
 
 import json
 import os

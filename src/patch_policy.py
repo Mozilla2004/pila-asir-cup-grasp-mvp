@@ -21,11 +21,11 @@ def validate_patch(patch: dict, success_trace: dict) -> dict:
 def generate_patch_report(
     failure_trace: dict, success_trace: dict, patch: dict
 ) -> str:
-    """Generate a markdown patch report (v0.3)."""
+    """Generate a markdown patch report (v0.5)."""
     lines = [
-        "# AS-IR Failure Patch Report (v0.3)",
+        "# AS-IR Failure Hypothesis and Patch Suggestion Report (v0.5)",
         "",
-        "## Failure Diagnosis",
+        "## Failure Hypothesis",
         "",
     ]
 
@@ -53,7 +53,7 @@ def generate_patch_report(
             f"- **Relation delta**: {relation_str}",
             f"- **Validation status**: {patch.get('validation_status', 'pending')}",
             "",
-            "## Applied Patch",
+            "## Patch Suggestion and Validation",
             "",
             f"- **Force adjustment**: {patch['patch']['adjust_force']}",
             f"- **Contact adjustment**: {patch['patch']['adjust_contact']}",
