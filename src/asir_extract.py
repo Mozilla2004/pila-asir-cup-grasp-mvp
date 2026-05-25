@@ -285,7 +285,7 @@ def extract_asir_trace(traj: dict) -> dict:
                 {"name": "slip_score_peak", "target": "< 0.3", "current": max_slip},
                 {"name": "tilt_deg_peak", "target": "< 8", "current": max_tilt},
                 {"name": "final_cup_height", "target": "> 0.15m", "current": "0.007m"},
-                {"name": "grip_force_stability", "target": "variance < 0.5", "current": "unknown"}
+                {"name": "grip_force_stability", "target": "variance < 0.5", "current": "not_measured_in_current_demo"}
             ],
             "validation_status": "pending",
             "patch": {

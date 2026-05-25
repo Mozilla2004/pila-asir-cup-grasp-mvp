@@ -1,4 +1,4 @@
-# PILa / AS-IR Cup-Grasp MVP v0.5
+# PILa / AS-IR Cup-Grasp MVP v0.5.2-RC2 "TraceForge / 迹铸"
 
 **PILa = Physical Interaction Language (物理交互语言层)**
 **AS-IR = Action-State Intermediate Representation (行动—状态中间表示层)**
@@ -39,7 +39,7 @@ AS-IR **不是** 失败报告生成器、日志记录系统、数据可视化工
 
 ## 本 Demo 测试什么
 
-**Version**: v0.5-stage-by-stage-trace
+**Version**: v0.5.2-RC2 "TraceForge / 迹铸"
 
 本 demo 测试 PILa 的核心假设：
 
@@ -59,11 +59,22 @@ AS-IR **不是** 失败报告生成器、日志记录系统、数据可视化工
 - ❌ 替代 VLA / World Model / RL / Controller
 - ❌ 真实世界的因果证明
 
+**Boundaries**:
+- This demo is not real-robot validated.
+- This demo does not replace VLA, World Model, RL, or Controller.
+- This demo should be understood as a physical interaction runtime trace prototype.
+
 ---
 
 ## 版本历史
 
-### v0.5 (Current)
+### v0.5.2-RC2 "TraceForge / 迹铸" (Current)
+- **焦点**: Stage-by-Stage Physical Interaction Runtime Trace (P0-P8)
+- **修复**: P6/P7/P8 重复渲染、P8 transition condition、success trace P6 对齐
+- **新增**: Coding Authority & Bounded Writeback Governance
+- **清理**: .DS_Store / __pycache__ 清理、README 图片引用修复
+
+### v0.5.0
 - **焦点**: Stage-by-Stage Physical Interaction Runtime Trace
 - **新增**: 实时语义追踪、基于假设的推理、Next Action Recommendation
 
@@ -177,6 +188,13 @@ asir-cup-grasp-mvp/
 - **No external CDN** — HTML is self-contained, opens locally (animations use vanilla CSS/JS)
 - **Reproducible** — `numpy.random.default_rng(42)` ensures same output every run
 - **Minimal dependencies** — numpy, matplotlib, jinja2 only
+
+## Semantic-Control Adapter Spec
+
+v0.5.2-RC2 also adds a conceptual `Semantic-Control Adapter Spec v0.1` (`docs/semantic_control_adapter_spec_v0.1.md`).
+This spec explains how a PILa / AS-IR semantic patch, such as `increase_support_constraint`, may be mapped to controller-facing constraints in a future implementation.
+The current demo does not control a real robot.
+All semantic-control mappings in this release remain conceptual candidates.
 
 ## Roadmap
 

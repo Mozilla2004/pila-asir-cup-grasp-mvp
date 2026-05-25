@@ -445,9 +445,12 @@ def _render_stage_by_stage_trace(failure_trace: dict, success_trace: dict) -> st
             }
         })
 
-        # Add existing phases P1-P5
+        # Add existing phases P1-P5 only (P6-P8 are added separately below)
         existing_phases = trace.get('phases', [])
         for phase in existing_phases:
+            phase_id = phase.get('id', '')
+            if phase_id in ('P6', 'P7', 'P8'):
+                continue  # skip — will be added below with proper structure
             stages.append(phase)
 
         # P6: Patch Suggestion / Next Action
@@ -481,6 +484,26 @@ def _render_stage_by_stage_trace(failure_trace: dict, success_trace: dict) -> st
                     'confidence': confidence,
                     'patch_type': patch.get('failure_type', 'unknown'),
                     'restart_phase': patch.get('patch', {}).get('restart_from_phase', 'unknown')
+                }
+            })
+        else:
+            # No failure patches — add P6 as "not applicable" to keep P0-P8 aligned
+            stages.append({
+                'id': 'P6',
+                'type': 'Patch Suggestion / Next Action',
+                'status': 'success',
+                'risk': 'GREEN',
+                'component_states': {},
+                'physical_relations': [],
+                'risk_signals': [],
+                'transition_condition': {
+                    'from_stage': 'P6',
+                    'to_next': 'P7',
+                    'condition_met': True,
+                    'trigger': 'no_failure_patches'
+                },
+                'additional_info': {
+                    'note': 'No failure detected — patch suggestion not applicable'
                 }
             })
 
@@ -517,7 +540,7 @@ def _render_stage_by_stage_trace(failure_trace: dict, success_trace: dict) -> st
             'physical_relations': [],
             'risk_signals': [],
             'transition_condition': {
-                'from_stage': 'P7',
+                'from_stage': 'P8',
                 'to_next': 'end',
                 'condition_met': True,
                 'trigger': 'learning_recorded'
@@ -687,6 +710,8 @@ def _build_interaction_flow(failure_trace: dict, success_trace: dict, patch: dic
     ]
 
     for p in failure_trace["phases"]:
+        if p["id"] in ("P6", "P7", "P8"):
+            continue  # skip cognitive stages — Patch node covers this
         color = status_colors.get(p["status"], "#95a5a6")
         risk = p.get("risk", "GREEN")
         bg, fg = risk_badges.get(risk, ("#eee", "#333"))

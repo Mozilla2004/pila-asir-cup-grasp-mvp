@@ -1,0 +1,49 @@
+# Runtime Trace Template
+# Part of PILa / AS-IR structured intelligence governance framework
+
+# --- Governance Metadata ---
+governance:
+  coding_mode: "distributed"
+  writeback_level: "L1"
+  scope_boundary:
+    - "src/*.py"
+    - "outputs/*.json"
+  validation_required: false
+  human_approval_required: false
+
+# --- Task Metadata ---
+task:
+  task_id: "T-XXX"
+  title: "Task title"
+  description: "What was done"
+  status: "completed"
+
+# --- Execution Trace ---
+execution:
+  files_inspected: []
+  files_modified: []
+  files_created: []
+
+# --- Validation ---
+validation:
+  required: true
+  criteria: []
+  overall_result: "passed"
+
+# --- Risk Assessment ---
+risks:
+  remaining_risks: []
+  scope_violations: []
+  forbidden_change_violations: []
+
+# --- Writeback Record ---
+writeback:
+  level_used: "L2"
+  files_written_back: []
+  changelog_updated: true
+
+# --- Audit Trail ---
+audit:
+  governance_compliant: true
+  violations: []
+  notes: []
